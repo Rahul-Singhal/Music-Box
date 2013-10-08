@@ -3,8 +3,12 @@
 #include <iostream>
 #include <string>
 #include <cmath>
-#include <GL/glut.h>
 
+#include <GLUT/glut.h>
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
+
+#include "textureLoader.h"
 using namespace std;
 
 static char mode = 'Q';
@@ -44,10 +48,14 @@ static float torso21=0,torso22=0,torso23=0;
 static float torso2Factor = 1;
 
 
+static GLuint textureSkin ;
+static GLuint textureShirt ;
+static GLuint texturePant ;
 
-static float angleTheta=0.0,angleAlpha=0.0;
+
+//static float angleTheta=0.0,angleAlpha=0.0;
 static float x=0.0f,y=0.0f,z=20.0f;
-static float r=20.0f;
+//static float r=20.0f;
 int count = 0;
 float fraction = 0.01;
 
@@ -158,11 +166,13 @@ void display( void )
 
 			//head and neck
 			glPushMatrix();
-				glTranslatef(0.0,-1.25,0.0);
+				glTranslatef(0.0,-1.5,0.0);
+                //glTranslatef(0.0,-1.25,0.0);
 				glRotatef(neck1, 1,0,0);
 				glRotatef(neck2, 0,1,0);
 				glRotatef(neck3, 0,0,1);
 				glPushMatrix();
+                    glRotatef(-90, 1,0,0);
 					glCallList(neckDL);
 				glPopMatrix();
 				glTranslatef(0.0,1.2,0.0);
@@ -290,51 +300,6 @@ void display( void )
 			  	glPopMatrix();
 			glPopMatrix(); //torso2 closed
 		glPopMatrix();
-
-		// 	  //left hand
-		// 	  glPushMatrix();
-		// 		//Rotation and translation corresponding to shoulder movement here
-		// 		glTranslatef(0,-0.5,0.0);
-		// 		glPushMatrix();
-		// 		  glCallList(shoulderDL);
-		// 		glPopMatrix();
-		// 		glPushMatrix();
-		// 			  glRotatef(-120, 0.0f, 0.0f, 1.0f);
-		// 			  glRotatef(90, 0.0f, 1.0f, 0.0f);
-		// 			  glPushMatrix();
-		// 				glCallList(armDL);
-		// 			  glPopMatrix();
-		// 			  glPushMatrix();
-		// 				//glRotatef(20,0,0,0);
-		// 				glTranslatef(0,0,3.0);
-		// 				//Rotation corresponding to elbow here
-		// 				glPushMatrix();
-		// 				  glCallList(elbowDL);
-		// 				glPopMatrix();
-		// 				glPushMatrix();
-		// 					glPushMatrix();
-		// 					  glCallList(forearmDL);
-		// 					glPopMatrix();
-		// 					glPushMatrix();
-		// 						glTranslatef(0,0,2);
-		// 						//rotation for wrist
-		// 						glPushMatrix();
-		// 						  glCallList(wristDL);
-		// 						  glPushMatrix();
-		// 							glCallList(handDL);
-		// 						glPopMatrix();
-		// 						glPopMatrix();
-		// 					glPopMatrix();
-		// 				glPopMatrix();
-		// 			  glPopMatrix();
-		// 		glPopMatrix();
-		// 	  glPopMatrix();
-		// 	glPopMatrix();
-		// glPopMatrix();
-	
-
-		
-
 	glPushMatrix();
 
 
@@ -467,6 +432,7 @@ void mouse(int button, int state, int x, int y)
 }
 
 void init(){
+    
 	initFace();
 	initNeck();
 	initTorso1();
@@ -805,7 +771,7 @@ GLuint createtorso1DL()
 	GLuint dl;
 	dl = glGenLists(2);
 	glNewList(dl,GL_COMPILE);
-	struct_neck();
+	struct_torso1();
 	glEndList();
 	return(dl);
 }
@@ -958,7 +924,7 @@ GLuint createLegDL()
 	return(dl);
 }
 
-void struct_foot(){
+void struct_foot(){ //let it be black, I am not applying texture here
 	glTranslatef(-0.25,0.6,0);
 	glScalef(0.4,0.5,0.1);	
 	struct_torso3();
@@ -967,220 +933,325 @@ void struct_foot(){
 void struct_hand(){
 	glTranslatef(-0.18,0.1,0.3);
 	glScalef(0.3,0.1,0.4);
-	struct_torso3();
+	//struct_torso3();
+    
+    glGenTextures(1, &texturePant);
+    glBindTexture(GL_TEXTURE_2D, texturePant);
+    textureLoader tLoader1("./skin1.bmp");
+    glEnable (GL_TEXTURE_2D);
+    glBegin(GL_POLYGON);
+	//glColor3f(0, 1, 0);
+	glVertex3f(0, 0, 0.75);
+	glVertex3f(-0.2,-1.5, 0.75);
+	glVertex3f(1.4,-1.5, 0.75);
+	glVertex3f(1.2,0, 0.75);
+	glEnd();
+	glBegin(GL_POLYGON);
+	//glColor3f(0, 1, 0);
+	glVertex3f(0, 0, -0.75);
+	glVertex3f(-0.2,-1.5, -0.75);
+	glVertex3f(1.4,-1.5, -0.75);
+	glVertex3f(1.2,0, -0.75);
+	glEnd();
+	glBegin(GL_POLYGON);
+	//glColor3f(0, 0, 1);
+	glVertex3f(0, 0, -0.75);
+	glVertex3f(-0.2,-1.5, -0.75);
+	glVertex3f(-0.2,-1.5, 0.75);
+	glVertex3f(0, 0, 0.75);
+	glEnd();
+	glBegin(GL_POLYGON);
+	//glColor3f(0, 0, 1);
+	glVertex3f(1.4,-1.5, -0.75);
+	glVertex3f(1.2,0, -0.75);
+	glVertex3f(1.2,0, 0.75);
+	glVertex3f(1.4,-1.5, 0.75);
+	glEnd();
+	glBegin(GL_POLYGON);
+	//glColor3f(1, 0, 0);
+	glVertex3f(0, 0, 0.75);
+	glVertex3f(1.2,0, 0.75);
+	glVertex3f(1.2,0, -0.75);
+	glVertex3f(0, 0, -0.75);
+	glEnd();
+	glBegin(GL_POLYGON);
+	//glColor3f(1, 0, 0);
+	glVertex3f(-0.2,-1.5, 0.75);
+	glVertex3f(1.4,-1.5, 0.75);
+	glVertex3f(1.4,-1.5, -0.75);
+	glVertex3f(-0.2,-1.5, -0.75);
+	glEnd();
+    glDisable(GL_TEXTURE_2D);
 }
 
 
 
 void struct_face(){
 	glScalef(1.5,2,1);
-	glColor3f(1,0,0);
-	glutSolidSphere(0.5,20,20);
+	//glColor3f(1,0,0);
+    
+    glGenTextures(1, &textureSkin);
+    glBindTexture(GL_TEXTURE_2D, textureSkin);
+    textureLoader tLoader1("./skin1.bmp");
+    glEnable (GL_TEXTURE_2D);
+    GLUquadricObj* Sphere;
+    Sphere=gluNewQuadric();
+    gluQuadricTexture(Sphere,1);
+    gluSphere(Sphere,0.5,20,20);
+    glDisable(GL_TEXTURE_2D);
+	//glutSolidSphere(0.5,20,20);
 }
 
-void struct_neck(){
-	glScalef(1.5,2,1);
-	glColor3f(0.5,0.5,0);
-	glutSolidCube(0.25);
+void struct_neck(){  //I changed it to cylinder so that I can apply texture
+	//glScalef(1.5,2,1);
+	//glColor3f(0.5,0.5,0);
+	//glutSolidCube(0.25);
+    
+    
+    glGenTextures(1, &textureSkin);
+    glBindTexture(GL_TEXTURE_2D, textureSkin);
+    textureLoader tLoader1("./skin1.bmp");
+    glEnable (GL_TEXTURE_2D);
+	GLUquadricObj *quadratic;
+	quadratic = gluNewQuadric();
+    gluQuadricTexture(quadratic,1);
+	gluCylinder(quadratic,0.375,0.375, 0.5, 20, 20);
+    glDisable(GL_TEXTURE_2D);
 }
 
 void struct_torso1(){
+    glGenTextures(1, &textureShirt);
+    glBindTexture(GL_TEXTURE_2D, textureShirt);
+    textureLoader tLoader1("./red1.bmp");
+    glEnable (GL_TEXTURE_2D);
 	glBegin(GL_POLYGON);
-	glColor3f(0, 1, 0);
+	//glColor3f(0, 1, 0);
 	glVertex3f(0, 0, 0.75);
 	glVertex3f(0.4,-3, 0.75);
 	glVertex3f(1.6,-3, 0.75);
 	glVertex3f(2,0, 0.75);
 	glEnd();
 	glBegin(GL_POLYGON);
-	glColor3f(0, 1, 0);
+	//glColor3f(0, 1, 0);
 	glVertex3f(0, 0, -0.75);
 	glVertex3f(0.4,-3, -0.75);
 	glVertex3f(1.6,-3, -0.75);
 	glVertex3f(2,0, -0.75);
 	glEnd();
 	glBegin(GL_POLYGON);
-	glColor3f(0, 0, 1);
+	//glColor3f(0, 0, 1);
 	glVertex3f(0, 0, -0.75);
 	glVertex3f(0.4,-3, -0.75);
 	glVertex3f(0.4,-3, 0.75);
 	glVertex3f(0, 0, 0.75);
 	glEnd();
 	glBegin(GL_POLYGON);
-	glColor3f(0, 0, 1);
+	//glColor3f(0, 0, 1);
 	glVertex3f(1.6,-3, -0.75);
 	glVertex3f(2,0, -0.75);
 	glVertex3f(2,0, 0.75);
 	glVertex3f(1.6,-3, 0.75);
 	glEnd();
 	glBegin(GL_POLYGON);
-	glColor3f(1, 0, 0);
+	//glColor3f(1, 0, 0);
 	glVertex3f(0, 0, 0.75);
 	glVertex3f(2,0, 0.75);
 	glVertex3f(2,0, -0.75);
 	glVertex3f(0, 0, -0.75);
 	glEnd();
 	glBegin(GL_POLYGON);
-	glColor3f(1, 0, 0);
+	//glColor3f(1, 0, 0);
 	glVertex3f(0.4,-3, 0.75);
 	glVertex3f(1.6,-3, 0.75);
 	glVertex3f(1.6,-3, -0.75);
 	glVertex3f(0.4,-3, -0.75);
 	glEnd();
+    glDisable(GL_TEXTURE_2D) ;
 }
 
 
 
-// void struct_torso2(){
-// 	glBegin(GL_POLYGON);
-// 	glColor3f(0.5, 0.5, 0);
-// 	glVertex3f(0, 0, 0.75);
-// 	glVertex3f(0,-0.2, 0.75);
-// 	glVertex3f(1.2,-0.2, 0.75);
-// 	glVertex3f(1.2,0, 0.75);
-// 	glEnd();
-// 	glBegin(GL_POLYGON);
-// 	glColor3f(0, 1, 0);
-// 	glVertex3f(0, 0, -0.75);
-// 	glVertex3f(0,-0.2, -0.75);
-// 	glVertex3f(1.2,-0.2, -0.75);
-// 	glVertex3f(1.2,0, -0.75);
-// 	glEnd();
-// 	glBegin(GL_POLYGON);
-// 	glColor3f(0, 0, 1);
-// 	glVertex3f(0, 0, -0.75);
-// 	glVertex3f(0,-0.2, -0.75);
-// 	glVertex3f(0,-0.2, 0.75);
-// 	glVertex3f(0, 0, 0.75);
-// 	glEnd();
-// 	glBegin(GL_POLYGON);
-// 	glColor3f(0, 0, 1);
-// 	glVertex3f(1.2,-0.2, -0.75);
-// 	glVertex3f(1.2,0, -0.75);
-// 	glVertex3f(1.2,0, 0.75);
-// 	glVertex3f(1.2,-0.2, 0.75);
-// 	glEnd();
-// 	glBegin(GL_POLYGON);
-// 	glColor3f(1, 0, 0);
-// 	glVertex3f(0, 0, 0.75);
-// 	glVertex3f(1.2,0, 0.75);
-// 	glVertex3f(1.2,0, -0.75);
-// 	glVertex3f(0, 0, -0.75);
-// 	glEnd();
-// 	glBegin(GL_POLYGON);
-// 	glColor3f(1, 0, 0);
-// 	glVertex3f(0,-0.2, 0.75);
-// 	glVertex3f(1.2,-0.2, 0.75);
-// 	glVertex3f(1.2,-0.2, -0.75);
-// 	glVertex3f(0,-0.2, -0.75);
-// 	glEnd();
-// }
-
 void struct_torso2(){
-	glColor3f(0.5,0.5,0);
+//glColor3f(0.5,0.5,0);
+    glGenTextures(1, &textureShirt);
+    glBindTexture(GL_TEXTURE_2D, textureShirt);
+    textureLoader tLoader1("./red1.bmp");
+    glEnable (GL_TEXTURE_2D);
+    
 	GLUquadricObj *quadratic;
 	quadratic = gluNewQuadric();
+    gluQuadricTexture(quadratic,1);
 	glPushMatrix();
 		glTranslatef(0.6,1.5,0);
 		glRotatef(90,1,0,0);
 		gluCylinder(quadratic,0.6,0.6,2, 20, 20);
 	glPopMatrix();
+    glDisable(GL_TEXTURE_2D);
 }
 
 void struct_torso3(){
+    glGenTextures(1, &texturePant);
+    glBindTexture(GL_TEXTURE_2D, texturePant);
+    textureLoader tLoader1("./pant2.bmp");
+    glEnable (GL_TEXTURE_2D);
+    
+    
 	glBegin(GL_POLYGON);
-	glColor3f(0, 1, 0);
+	//glColor3f(0, 1, 0);
 	glVertex3f(0, 0, 0.75);
 	glVertex3f(-0.2,-1.5, 0.75);
 	glVertex3f(1.4,-1.5, 0.75);
 	glVertex3f(1.2,0, 0.75);
 	glEnd();
 	glBegin(GL_POLYGON);
-	glColor3f(0, 1, 0);
+	//glColor3f(0, 1, 0);
 	glVertex3f(0, 0, -0.75);
 	glVertex3f(-0.2,-1.5, -0.75);
 	glVertex3f(1.4,-1.5, -0.75);
 	glVertex3f(1.2,0, -0.75);
 	glEnd();
 	glBegin(GL_POLYGON);
-	glColor3f(0, 0, 1);
+	//glColor3f(0, 0, 1);
 	glVertex3f(0, 0, -0.75);
 	glVertex3f(-0.2,-1.5, -0.75);
 	glVertex3f(-0.2,-1.5, 0.75);
 	glVertex3f(0, 0, 0.75);
 	glEnd();
 	glBegin(GL_POLYGON);
-	glColor3f(0, 0, 1);
+	//glColor3f(0, 0, 1);
 	glVertex3f(1.4,-1.5, -0.75);
 	glVertex3f(1.2,0, -0.75);
 	glVertex3f(1.2,0, 0.75);
 	glVertex3f(1.4,-1.5, 0.75);
 	glEnd();
 	glBegin(GL_POLYGON);
-	glColor3f(1, 0, 0);
+	//glColor3f(1, 0, 0);
 	glVertex3f(0, 0, 0.75);
 	glVertex3f(1.2,0, 0.75);
 	glVertex3f(1.2,0, -0.75);
 	glVertex3f(0, 0, -0.75);
 	glEnd();
 	glBegin(GL_POLYGON);
-	glColor3f(1, 0, 0);
+	//glColor3f(1, 0, 0);
 	glVertex3f(-0.2,-1.5, 0.75);
 	glVertex3f(1.4,-1.5, 0.75);
 	glVertex3f(1.4,-1.5, -0.75);
 	glVertex3f(-0.2,-1.5, -0.75);
 	glEnd();
+    glDisable(GL_TEXTURE_2D);
 }
 
 
 
 
 void struct_shoulder(){
-	glColor3f(0.5,0.5,0);
-	glutSolidSphere(0.50,20,20);
+	
+    glGenTextures(1, &textureSkin);
+    glBindTexture(GL_TEXTURE_2D, textureSkin);
+    textureLoader tLoader1("./red1.bmp");
+    glEnable (GL_TEXTURE_2D);
+    GLUquadricObj* Sphere;
+    Sphere=gluNewQuadric();
+    gluQuadricTexture(Sphere,1);
+    gluSphere(Sphere,0.5,20,20);
+    glDisable(GL_TEXTURE_2D);
+   // glutSolidSphere(0.50,20,20);
 }
 
 void struct_elbow(){
-	glColor3f(0.5,0.5,0);
-	glutSolidSphere(0.35,20,20);
+	//glColor3f(0.5,0.5,0);
+    
+    glGenTextures(1, &textureSkin);
+    glBindTexture(GL_TEXTURE_2D, textureSkin);
+    textureLoader tLoader1("./skin1.bmp");
+    glEnable (GL_TEXTURE_2D);
+    GLUquadricObj* Sphere;
+    Sphere=gluNewQuadric();
+    gluQuadricTexture(Sphere,1);
+    gluSphere(Sphere,0.35,20,20);
+    glDisable(GL_TEXTURE_2D);
+	//glutSolidSphere(0.35,20,20);
 }
 
 void struct_wrist(){
-	glColor3f(0.5,0.5,0);
-	glutSolidSphere(0.20,20,20);
+	//glColor3f(0.5,0.5,0);
+    
+    glGenTextures(1, &textureSkin);
+    glBindTexture(GL_TEXTURE_2D, textureSkin);
+    textureLoader tLoader1("./skin1.bmp");
+    glEnable (GL_TEXTURE_2D);
+    GLUquadricObj* Sphere;
+    Sphere=gluNewQuadric();
+    gluQuadricTexture(Sphere,1);
+    gluSphere(Sphere,0.2,20,20);
+    glDisable(GL_TEXTURE_2D);
+	//glutSolidSphere(0.20,20,20);
 }
 
 void struct_ankle(){
-	glColor3f(0.5,0.5,0);
-	glutSolidSphere(0.15,20,20);
+    
+    glGenTextures(1, &textureSkin);
+    glBindTexture(GL_TEXTURE_2D, textureSkin);
+    textureLoader tLoader1("./skin1.bmp");
+    glEnable (GL_TEXTURE_2D);
+    GLUquadricObj* Sphere;
+    Sphere=gluNewQuadric();
+    gluQuadricTexture(Sphere,1);
+    gluSphere(Sphere,0.15,20,20);
+    glDisable(GL_TEXTURE_2D);
 }
 
 void struct_arm(){
-	glColor3f(0,0,0);
+	//glColor3f(0,0,0);
+   
+    glGenTextures(1, &textureSkin);
+    glBindTexture(GL_TEXTURE_2D, textureSkin);
+    textureLoader tLoader1("./skin1.bmp");
+    glEnable (GL_TEXTURE_2D);
 	GLUquadricObj *quadratic;
 	quadratic = gluNewQuadric();
+    gluQuadricTexture(quadratic,1);
 	gluCylinder(quadratic,0.35,0.25, 3, 20, 20);
+    glDisable(GL_TEXTURE_2D);
 }
 
 void struct_forearm(){
-	glColor3f(0,0,0);
+	//glColor3f(0,0,0);
+    glGenTextures(1, &textureSkin);
+    glBindTexture(GL_TEXTURE_2D, textureSkin);
+    textureLoader tLoader1("./skin1.bmp");
+    glEnable (GL_TEXTURE_2D);
 	GLUquadricObj *quadratic;
 	quadratic = gluNewQuadric();
+    gluQuadricTexture(quadratic,1);
 	gluCylinder(quadratic,0.20,0.18, 2, 20, 20);
+    glDisable(GL_TEXTURE_2D);
 }
 
 void struct_thigh(){
-	glColor3f(0,0,0);
+	//glColor3f(0,0,0);
+    glGenTextures(1, &textureSkin);
+    glBindTexture(GL_TEXTURE_2D, textureSkin);
+    textureLoader tLoader1("./skin1.bmp");
+    glEnable (GL_TEXTURE_2D);
 	GLUquadricObj *quadratic;
 	quadratic = gluNewQuadric();
+    gluQuadricTexture(quadratic,1);
 	gluCylinder(quadratic,0.35,0.25, 1.5, 20, 20);
+    glDisable(GL_TEXTURE_2D);
 }
 
 void struct_leg(){
-	glColor3f(0,0,0);
+	//glColor3f(0,0,0);
+    glGenTextures(1, &textureSkin);
+    glBindTexture(GL_TEXTURE_2D, textureSkin);
+    textureLoader tLoader1("./skin1.bmp");
+    glEnable (GL_TEXTURE_2D);
 	GLUquadricObj *quadratic;
 	quadratic = gluNewQuadric();
+    gluQuadricTexture(quadratic,1);
 	gluCylinder(quadratic,0.20,0.18, 1, 20, 20);
+    glDisable(GL_TEXTURE_2D);
 }
 
 int main (int argc, char *argv[])
@@ -1191,7 +1262,7 @@ int main (int argc, char *argv[])
   glutInitWindowSize(640,360);
   glutCreateWindow( "Assignment 2" );
   glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-  
+  //glEnable (GL_TEXTURE_2D);
   glutDisplayFunc( display );
   glutReshapeFunc( resize );
   glutMouseFunc( mouse );

@@ -1,7 +1,9 @@
 #ifndef TEXTURELOADER_H
 #define TEXTURELOADER_H
 
-#include <GL/glut.h>
+#include <GLUT/glut.h>
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
 
 class textureLoader{
 	private:
