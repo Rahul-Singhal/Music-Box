@@ -1,6 +1,8 @@
 #ifndef TEXTURELOADER_H
 #define TEXTURELOADER_H
 
+#include <GL/glut.h>
+
 class textureLoader{
 	private:
 		const char* imagepath;

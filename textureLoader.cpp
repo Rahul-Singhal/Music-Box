@@ -48,7 +48,28 @@ bool textureLoader::readImage(){
 	 
 	//Everything is in memory now, the file can be closed
 	fclose(file);
+
+	//set the texture properties
 	
+	//unsigned char* pixels = tLoader1.getData();
+
+   glShadeModel(GL_SMOOTH);               // Enable smooth shading of color
+   //glClearColor(1.0f, 1.0f, 1.0f, 1.0f);  // Set background (clear) color to white
+   
+   // Depth-buffer for hidden surface removal
+   glClearDepth(1.0f);       // Set clear depth value to farthest
+   glEnable(GL_DEPTH_TEST);  // Enable depth-buffer for hidden surface removal
+   glDepthFunc(GL_LEQUAL);   // The type of depth testing to do
+   glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+   glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+   glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+   glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+   glEnable(GL_TEXTURE_2D);  // Enable 2D texture 
+   // Correct texture distortion in perpective projection
+   glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+
+   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_BGR, 
+         GL_UNSIGNED_BYTE, data);  // Create texture from image data
 	return true;
 
 }

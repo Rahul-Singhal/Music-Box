@@ -21,8 +21,8 @@ typedef struct {
 MouseState mouseState = {false, false, 0, 0};
 
 // Animation
-GLfloat xAngle = 0.0f;  // Rotational angle about the x-axis
-GLfloat yAngle = 0.0f;  // Rotational angle about the y-axis
+GLfloat xAngle = 42.6f;  // Rotational angle about the x-axis
+GLfloat yAngle = -40.2f;  // Rotational angle about the y-axis
 
 
 static void
@@ -76,6 +76,7 @@ glutSolidCube(GLdouble size)
 
 static float ratio;
 static int lidAngle = 0;
+static float baseHeight = 0.1;
 
 void resize(int w, int h)
 {
@@ -103,15 +104,22 @@ void resize(int w, int h)
 static GLint mainDL;
 static GLint bottomBoxDL;
 static GLint boxLidDL;
-static GLuint textureID ;
+static GLint boxBaseDL;
+static GLuint texture1 ;
+static GLuint texture2 ;
+static GLuint texture3 ;
+
 /*enumerate box struct functions*/
 void init();
 void initBottomBox();
 void initBoxLid();
+void initBoxBase();
 GLuint createBottomBoxDL() ;
 GLuint createBoxLidDL() ;
+GLuint createBoxBaseDL() ;
 void struct_bottomBox();
 void struct_boxLid();
+void struct_boxBase();
 /*----------------------------------------------------------*/
 
 void display( void )
@@ -122,8 +130,10 @@ void display( void )
   glRotatef(xAngle, 1.0f, 0.0f, 0.0f);
   glRotatef(yAngle, 0.0f, 1.0f, 0.0f);
   
+  
   glPushMatrix();
     glCallList(bottomBoxDL);
+    glCallList(boxBaseDL);
     glCallList(boxLidDL);
   glPopMatrix();
   glutSwapBuffers();
@@ -173,35 +183,23 @@ void mouseMove(int x, int y)
 
 void init(){
 
-  textureLoader tLoader1("./images.bmp");
-  unsigned char* pixels = tLoader1.getData();
-  int width = tLoader1.getWidth();
-  int height = tLoader1.getHeight();
+  // glGenTextures(1, &texture1);
+  // glBindTexture(GL_TEXTURE_2D, texture1);
+   glGenTextures(1, &texture1);
+   glBindTexture(GL_TEXTURE_2D, texture1);
+   textureLoader tLoader1("./wood3.bmp");
 
-   glShadeModel(GL_SMOOTH);               // Enable smooth shading of color
-   glClearColor(1.0f, 1.0f, 1.0f, 1.0f);  // Set background (clear) color to white
-   
-   // Depth-buffer for hidden surface removal
-   glClearDepth(1.0f);       // Set clear depth value to farthest
-   glEnable(GL_DEPTH_TEST);  // Enable depth-buffer for hidden surface removal
-   glDepthFunc(GL_LEQUAL);   // The type of depth testing to do
+   glGenTextures(1, &texture2);
+   glBindTexture(GL_TEXTURE_2D, texture2);
+   textureLoader tLoader2("./wood4.bmp");
 
-
-
-   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_BGR, 
-         GL_UNSIGNED_BYTE, pixels);  // Create texture from image data
-   glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-   glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-   glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-   glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-   
-   glEnable(GL_TEXTURE_2D);  // Enable 2D texture 
-   
-   // Correct texture distortion in perpective projection
-   glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+   glGenTextures(1, &texture3);
+   glBindTexture(GL_TEXTURE_2D, texture3);
+   textureLoader tLoader3("./wood5.bmp");
   
-
+   
   initBottomBox();
+  initBoxBase();
   initBoxLid();
 }
 
@@ -215,6 +213,11 @@ void initBoxLid(){
   boxLidDL = createBoxLidDL();
 }
 
+void initBoxBase(){
+  glEnable(GL_DEPTH_TEST);
+  boxBaseDL = createBoxBaseDL();
+}
+
 
 void specialKey(int key, int x, int y) {
 	
@@ -223,17 +226,28 @@ void specialKey(int key, int x, int y) {
 void processNormalKeys(unsigned char key, int x, int y) 
 {
   if (key == 27) exit(0);
+  float deltaHeight = 1.4/120;
   if (key == 'o' || key == 'O'){
-      if(lidAngle > -80)lidAngle -= 2;
+      if(lidAngle > -120){lidAngle -= 2; 
+        if(baseHeight < 0.8){
+          baseHeight += deltaHeight;
+        }
+      }
       else return;
       boxLidDL = createBoxLidDL();
+      boxBaseDL = createBoxBaseDL();
       glutPostRedisplay();
       return;
   }
   if (key == 'c' || key == 'C'){
-      if(lidAngle < 0)lidAngle += 2;
+      if(lidAngle < 0){lidAngle += 2;
+        if(baseHeight > 0.1){
+          baseHeight -= deltaHeight;
+        }
+      }
       else return;
       boxLidDL = createBoxLidDL();
+      boxBaseDL = createBoxBaseDL();
       glutPostRedisplay();
       return;
   }
@@ -245,6 +259,16 @@ GLuint createBottomBoxDL()
   dl = glGenLists(1);
   glNewList(dl,GL_COMPILE);
   struct_bottomBox();
+  glEndList();
+  return(dl);
+}
+
+GLuint createBoxBaseDL() 
+{
+  GLuint dl;
+  dl = glGenLists(1);
+  glNewList(dl,GL_COMPILE);
+  struct_boxBase();
   glEndList();
   return(dl);
 }
@@ -265,6 +289,7 @@ GLuint createBoxLidDL()
 }
 
 void struct_bottomBox(){
+  glBindTexture(GL_TEXTURE_2D, texture2);
 	  glColor3f(0.8,0.8,0.8);
 	  /*bottom plane*/
 	  glPushMatrix();
@@ -272,6 +297,7 @@ void struct_bottomBox(){
 		  glutSolidCube(1);
 	  glPopMatrix();
 	  //glColor3F(0.7,0.45,0.2);
+    //glBindTexture(GL_TEXTURE_2D, texture1);
 	  /*left plane*/
 	  glPushMatrix();
 	  	  glTranslatef(-1.5,0.46,0);
@@ -301,9 +327,21 @@ void struct_bottomBox(){
 	      glScalef(3.0f,1.0f,0.1f);
 	      glutSolidCube(1);
 	  glPopMatrix();
+
+}
+
+void struct_boxBase(){
+
+  glBindTexture(GL_TEXTURE_2D, texture3);
+      glPushMatrix();
+        glTranslatef(0,baseHeight,0);
+        glScalef(3.0f,0.1f,2.0f);
+        glutSolidCube(1);
+      glPopMatrix();
 }
 
 void struct_boxLid(){
+  glBindTexture(GL_TEXTURE_2D, texture1);
   glPushMatrix();
     glTranslatef(0,0.9,1);
     glRotatef(180,1.0,0,0);
@@ -315,6 +353,7 @@ void struct_boxLid(){
           glutSolidCube(1);
         glPopMatrix();
         //glColor3F(0.7,0.45,0.2);
+        //glBindTexture(GL_TEXTURE_2D, texture1);
         /*left plane*/
         glPushMatrix();
             glTranslatef(-1.5,0.46,0);
@@ -347,6 +386,7 @@ void struct_boxLid(){
     glPopMatrix();
   glPopMatrix();
 }
+
 
 int main (int argc, char *argv[]) 
 {
