@@ -1,4 +1,6 @@
 Music-Box
 =========
 
-An animated music box created in openGL
+An animated music box created in openGL.
+
+
