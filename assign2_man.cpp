@@ -51,6 +51,7 @@ static float torso2Factor = 1;
 static GLuint textureSkin ;
 static GLuint textureShirt ;
 static GLuint texturePant ;
+static GLuint textureCap ;
 
 
 //static float angleTheta=0.0,angleAlpha=0.0;
@@ -82,8 +83,11 @@ void resize(int w, int h)
 }
 
 /*----------------------------------------------------------*/
-
-
+static GLint noseDL;
+static GLint lipsDL;
+static GLint eyesDL;
+static GLint stickDL;
+static GLint capDL;
 static GLint faceDL;
 static GLint neckDL;
 static GLint torso1DL;
@@ -100,6 +104,10 @@ static GLint ankleDL;
 static GLint footDL;
 static GLint handDL;
 void init();
+void initNose();
+void initEyes();
+void initStick();
+void initLips();
 void initFace();
 void initNeck();
 void initTorso1();
@@ -115,6 +123,12 @@ void initForearm();
 void initAnkle();
 void initHand();
 void initFoot();
+void initCap();
+GLuint createNoseDL();
+GLuint createStickDL();
+GLuint createLipsDL();
+GLuint createEyesDL();
+GLuint createCapDL();
 GLuint createFaceDL() ;
 GLuint createNeckDL() ;
 GLuint Torso1DL() ;
@@ -130,6 +144,11 @@ GLuint createLegDL() ;
 GLuint createAnkleDL() ;
 GLuint createHandDL() ;
 GLuint createFootDL() ;
+void struct_nose();
+void struct_lips();
+void struct_eyes();
+void struct_stick();
+void struct_cap();
 void struct_face();
 void struct_neck();
 void struct_torso1();
@@ -177,9 +196,33 @@ void display( void )
 				glPopMatrix();
 				glTranslatef(0.0,1.2,0.0);
 				glPushMatrix();
-					glCallList(faceDL);
+                    glCallList(faceDL);
+                    glTranslatef(-0.25,0.05,1.0);
+                    glColor3f(0,0,0);
+                    glCallList(eyesDL);
+                    glTranslatef(+0.25,-0.05,-1.0);
+                    glTranslatef(+0.25,0.05,1.0);
+                    glColor3f(0,0,0);
+                    glCallList(eyesDL);
+                    glTranslatef(-0.25,-0.05,-1.0);
+                    glColor3f(1,1,1);
+                    glTranslatef(0,0,1.0);
+                    glPushMatrix();
+                        glCallList(noseDL);
+                    glPopMatrix();
+                    glTranslatef(0,0,-1.0);
+    
+                    glColor3f(1,0,0);
+                    glTranslatef(0,-0.25,1);
+                    glCallList(lipsDL);
+                    glTranslatef(0,+0.25,-1);
+                    glColor3f(1,1,1);
 				glPopMatrix();
-			glPopMatrix();
+                glPushMatrix();
+                    glTranslatef(0,0.6,0.0);
+                    glCallList(capDL);
+                    glPopMatrix();
+                glPopMatrix();
 
 	  
 
@@ -241,6 +284,8 @@ void display( void )
 								  			glCallList(wristDL);
 									  		glPushMatrix();
 												glCallList(handDL);
+                                                glRotatef(90, 1,0,0);
+                                                glCallList(stickDL);
 											glPopMatrix();
 										glPopMatrix();
 									glPopMatrix();
@@ -432,7 +477,7 @@ void mouse(int button, int state, int x, int y)
 }
 
 void init(){
-    
+    initNose();
 	initFace();
 	initNeck();
 	initTorso1();
@@ -448,6 +493,32 @@ void init(){
 	initHand();
 	initFoot();
 	initAnkle();
+    initCap();
+    initEyes();
+    initLips();
+    initStick();
+}
+void initEyes(){
+	glEnable(GL_DEPTH_TEST);
+	eyesDL = createEyesDL();
+}
+void initNose(){
+	glEnable(GL_DEPTH_TEST);
+	noseDL = createNoseDL();
+}
+
+void initLips(){
+	glEnable(GL_DEPTH_TEST);
+	lipsDL = createLipsDL();
+}
+void initStick(){
+	glEnable(GL_DEPTH_TEST);
+	stickDL = createStickDL();
+}
+
+void initCap(){
+	glEnable(GL_DEPTH_TEST);
+	capDL = createCapDL();
 }
 
 void initFace(){
@@ -746,6 +817,48 @@ void processNormalKeys(unsigned char key, int x, int y)
 
 }
 
+GLuint createNoseDL()
+{
+    GLuint dl;
+    dl = glGenLists(1);
+    glNewList(dl,GL_COMPILE);
+    struct_nose();
+    glEndList();
+    return(dl);
+}
+
+
+GLuint createStickDL()
+{
+    GLuint dl;
+    dl = glGenLists(1);
+    glNewList(dl,GL_COMPILE);
+    struct_stick();
+    glEndList();
+    return(dl);
+}
+
+
+GLuint createEyesDL()
+{
+    GLuint dl;
+    dl = glGenLists(1);
+    glNewList(dl,GL_COMPILE);
+    struct_eyes();
+    glEndList();
+    return(dl);
+}
+
+
+GLuint createLipsDL()
+{
+    GLuint dl;
+    dl = glGenLists(1);
+    glNewList(dl,GL_COMPILE);
+    struct_lips();
+    glEndList();
+    return(dl);
+}
 GLuint createFaceDL()
 {
   GLuint dl;
@@ -755,6 +868,17 @@ GLuint createFaceDL()
   glEndList();
   return(dl);
 }
+
+GLuint createCapDL()
+{
+    GLuint dl;
+    dl = glGenLists(13);
+    glNewList(dl,GL_COMPILE);
+    struct_cap();
+    glEndList();
+    return(dl);
+}
+
 
 GLuint createNeckDL()
 {
@@ -884,25 +1008,6 @@ GLuint createForearmDL()
 	return(dl);
 }
 
-// GLuint createHandDL()
-// {
-// 	GLuint dl;
-// 	dl = glGenLists(8);
-// 	glNewList(dl,GL_COMPILE);
-// 	struct_hand();
-// 	glEndList();
-// 	return(dl);
-// }
-
-// GLuint createFootDL()
-// {
-// 	GLuint dl;
-// 	dl = glGenLists(8);
-// 	glNewList(dl,GL_COMPILE);
-// 	struct_foot();
-// 	glEndList();
-// 	return(dl);
-// }
 
 GLuint createThighDL()
 {
@@ -1024,6 +1129,75 @@ void struct_face(){
     gluSphere(Sphere,0.5,20,20);
     glDisable(GL_TEXTURE_2D);
 	//glutSolidSphere(0.5,20,20);
+}
+
+void struct_cap(){
+    
+	//glScalef(1.5,2,1);
+	//glColor3f(1,0,0);
+    //glColor3f(1,0,0);
+
+    glGenTextures(1, &textureCap);
+    glBindTexture(GL_TEXTURE_2D, textureCap);
+    textureLoader tLoader1("./cap1.bmp");
+    glEnable (GL_TEXTURE_2D);
+    GLUquadricObj* quadric;
+    quadric=gluNewQuadric();
+    gluQuadricTexture(quadric,1);
+    glRotatef(-90, 1,0,0);
+    glPushMatrix();
+        gluCylinder(quadric,0.65,0.65,2, 20, 20);
+        gluDeleteQuadric(quadric);
+        gluDisk(quadric, 0.0,1,20, 1);
+        gluCylinder(quadric,1,1,0.5, 20, 20);
+        glTranslatef(0,0,0.5);
+    gluDisk(quadric, 0.0f,1,20, 1); 
+    glPopMatrix();
+    glDisable(GL_TEXTURE_2D);
+	//glutSolidSphere(0.5,20,20);
+}
+
+void struct_stick(){
+    glColor3f(0,0,0);
+    //glGenTextures(1, &textureSkin);
+    //glBindTexture(GL_TEXTURE_2D, textureSkin);
+    
+    //textureLoader tLoader1("./skin1.bmp");
+    //glEnable (GL_TEXTURE_2D);
+	GLUquadricObj *quadratic;
+	quadratic = gluNewQuadric();
+    //gluQuadricTexture(quadratic,1);
+	gluCylinder(quadratic,0.2,0.2, 15, 20, 20);
+    glColor3f(1, 1, 1);
+   // glDisable(GL_TEXTURE_2D);
+    
+}
+
+void struct_nose(){
+    glColor3f(1,0,0);
+	GLUquadricObj *quadratic;
+	quadratic = gluNewQuadric();
+    //gluQuadricTexture(quadratic,1);
+	gluCylinder(quadratic,0.09,0,3, 20, 20);
+    glColor3f(1, 1, 1);
+    // glDisable(GL_TEXTURE_2D);
+    
+}
+void struct_eyes(){
+    //glScalef(1.5,2,1);
+	//glColor3f(0,0,0);
+    GLUquadricObj* Sphere;
+    Sphere=gluNewQuadric();
+    gluSphere(Sphere,0.05,20,20);
+    glColor3f(1, 1, 1);
+	//glutSolidSphere(0.5,20,20);
+}
+
+void struct_lips(){
+    //glColor3f(1,0,0);
+    glScalef(2,1,1);
+	struct_eyes();
+    glColor3f(1, 1, 1);
 }
 
 void struct_neck(){  //I changed it to cylinder so that I can apply texture
