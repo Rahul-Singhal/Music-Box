@@ -147,6 +147,7 @@ private:
 	void struct_ankle();
 	void struct_hand();
 	void struct_foot();
+	void print();
 
 public:
 	man();

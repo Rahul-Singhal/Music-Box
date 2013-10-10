@@ -307,37 +307,55 @@ man::man(){
 	mode = 'Q';
 	subMode = 'Q';
 
-	neck1=0;neck2=0;neck3=0;
 	neckFactor = 1;
-
-	shoulderLeft1=0;shoulderLeft2=0;shoulderLeft3=0;
 	shoulderFactor = 1;
-	shoulderRight1=0;shoulderRight2=0;shoulderRight3=0;
-
-	elbowLeft=0;
 	elbowFactor = 1;
-	elbowRight=0;
-
-	wristLeft1=0;wristLeft2=0;wristLeft3=0;
 	wristFactor = 1;
-	wristRight1=0;wristRight2=0;wristRight3=0;
-
-	hipLeft1=0;hipLeft2=0;hipLeft3=0;
 	hipFactor = 1;
-	hipRight1=0;hipRight2=0;hipRight3=0;
-
-	ankleLeft1=0;ankleLeft2=0;ankleLeft3=0;
 	ankleFactor = 1;
-	ankleRight1=0;ankleRight2=0;ankleRight3=0;
 
-	kneeLeft=0;
-	kneeFactor = 1;
+	//setup the initial dancing position
+
+	neck1=27;
+	neck2=15;
+	neck3=0;
+	shoulderLeft1=-82;
+	shoulderLeft2=37;
+	shoulderLeft3=-12;
+	shoulderRight1=0;
+	shoulderRight2=40;
+	shoulderRight3=26;
+	wristLeft1=0;
+	wristLeft2=0;
+	wristLeft3=-69;
+	wristRight1=0;
+	wristRight2=0;
+	wristRight3=0;
+	ankleLeft1=0;
+	ankleLeft2=0;
+	ankleLeft3=0;
+	ankleRight1=25;
+	ankleRight2=0;
+	ankleRight3=0;
+	hipLeft1=0;
+	hipLeft2=0;
+	hipLeft3=-25;
+	hipRight1=-3;
+	hipRight2=3;
+	hipRight3=-30;
+	elbowLeft=-120;
+	elbowRight=0;
+	kneeLeft=88;
 	kneeRight=0;
+	torso11=0;
+	torso12=0;
+	torso13=0;
+	torso21=17;
+	torso22=0;
+	torso23=6;
 
-	torso11=0;torso12=0;torso13=0;
 	torso1Factor = 1;
 
-	torso21=0;torso22=0;torso23=0;
 	torso2Factor = 1;
 
 	angleTheta=0.0;angleAlpha=0.0;
@@ -658,6 +676,59 @@ void man::specialKey(int key, int x, int y) {
 	}
 }
 
+void man::print(){
+	cout<<"neck1 "<<neck1<<endl;
+	cout<<"neck2 "<<neck2<<endl;
+	cout<<"neck3 "<<neck3<<endl;
+
+	cout<<"shoulderLeft1 "<<shoulderLeft1<<endl;
+	cout<<"shoulderLeft2 "<<shoulderLeft2<<endl;
+	cout<<"shoulderLeft3 "<<shoulderLeft3<<endl;
+
+	cout<<"shoulderRight1 "<<shoulderRight1<<endl;
+	cout<<"shoulderRight2 "<<shoulderRight2<<endl;
+	cout<<"shoulderRight3 "<<shoulderRight3<<endl;
+
+
+	cout<<"wristLeft1 "<<wristLeft1<<endl;
+	cout<<"wristLeft2 "<<wristLeft2<<endl;
+	cout<<"wristLeft3 "<<wristLeft3<<endl;
+
+	cout<<"wristRight1 "<<wristRight1<<endl;
+	cout<<"wristRight2 "<<wristRight2<<endl;
+	cout<<"wristRight3 "<<wristRight3<<endl;
+
+	cout<<"ankleLeft1 "<<ankleLeft1<<endl;
+	cout<<"ankleLeft2 "<<ankleLeft2<<endl;
+	cout<<"ankleLeft3 "<<ankleLeft3<<endl;
+
+	cout<<"ankleRight1 "<<ankleRight1<<endl;
+	cout<<"ankleRight2 "<<ankleRight2<<endl;
+	cout<<"ankleRight3 "<<ankleRight3<<endl;
+
+	cout<<"hipLeft1 "<<hipLeft1<<endl;
+	cout<<"hipLeft2 "<<hipLeft2<<endl;
+	cout<<"hipLeft3 "<<hipLeft3<<endl;
+
+	cout<<"hipRight1 "<<hipRight1<<endl;
+	cout<<"hipRight2 "<<hipRight2<<endl;
+	cout<<"hipRight3 "<<hipRight3<<endl;
+
+	cout<<"elbowLeft "<<elbowLeft<<endl;
+	cout<<"elbowRight "<<elbowRight<<endl;
+
+	cout<<"kneeLeft "<<kneeLeft<<endl;
+	cout<<"kneeRight "<<kneeRight<<endl;
+
+	cout<<"torso11 "<<torso11<<endl;
+	cout<<"torso12 "<<torso12<<endl;
+	cout<<"torso13 "<<torso13<<endl;
+
+	cout<<"torso21 "<<torso21<<endl;
+	cout<<"torso22 "<<torso22<<endl;
+	cout<<"torso23 "<<torso23<<endl;
+}
+
 void man::processNormalKeys(unsigned char key, int x, int y) 
 {
 
@@ -695,6 +766,10 @@ void man::processNormalKeys(unsigned char key, int x, int y)
 
   if(key == 'B' || key == 'b'){
   	mode = 'B';
+  }
+
+  if(key == 'p' || key == 'P'){
+  	print();
   }
 
   if(key == 'R' || key == 'r'){
