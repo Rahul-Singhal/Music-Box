@@ -92,7 +92,7 @@ There are 4 modes of interaction that we provide in this package.
 3. In case of just one degree of freedom, use the keys 'UP' and 'DOWN' arrow keys to move the part.
 
 
-											"HAVE FUN PLAYING WITH THE OBJECTS!!"
+									"HAVE FUN PLAYING WITH THE OBJECTS!!"
 
 
 
