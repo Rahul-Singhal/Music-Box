@@ -17,7 +17,7 @@ SRCDIR = $(PROJECT_ROOT)/src
 OBJDIR = $(PROJECT_ROOT)/obj
 BINDIR = $(PROJECT_ROOT)/bin
 
-LIBS = -lGL -lGLU -lglut
+LIBS = -lGL -lGLU -lglut -lGLEW
 TARGET = music_box
 
 SRCS := $(wildcard $(SRCDIR)/*.cpp)

@@ -6,6 +6,7 @@
 #include <string>
 #include <cmath>
 #include <GL/glut.h>
+#include "man.h"
 using namespace std;
 
 

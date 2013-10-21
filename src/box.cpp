@@ -79,9 +79,6 @@ box::box(){
    glGenTextures(1, &texture3);
    glBindTexture(GL_TEXTURE_2D, texture3);
    textureLoader tLoader3("textures/wood5.bmp");
-
-
-  
    
   initBottomBox();
   initBoxBase();
