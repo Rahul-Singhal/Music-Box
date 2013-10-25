@@ -205,10 +205,6 @@ furniture::furniture(){
   glBindTexture(GL_TEXTURE_2D, texture3);
   textureLoader tLoader3("textures/stone2_part2.bmp");
 
-  glGenTextures(1, &texture4);
-  glBindTexture(GL_TEXTURE_2D, texture4);
-  textureLoader tLoader4("textures/door4.bmp");
-
   initBox();
   initCover();
 }

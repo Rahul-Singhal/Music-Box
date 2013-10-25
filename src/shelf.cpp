@@ -373,11 +373,7 @@ shelf::shelf(){
 
   glGenTextures(1, &texture2);
   glBindTexture(GL_TEXTURE_2D, texture2);
-  textureLoader tLoader2("textures/tv.bmp");
-
-  glGenTextures(1, &texture3);
-  glBindTexture(GL_TEXTURE_2D, texture3);
-  textureLoader tLoader3("textures/roof1.bmp");
+  textureLoader tLoader2("textures/tv1.bmp");
 
   glGenTextures(1, &texture5);
   glBindTexture(GL_TEXTURE_2D, texture5);

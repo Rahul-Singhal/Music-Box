@@ -137,6 +137,7 @@ void room::struct_room(){
         glScalef(0.4,0.8,0.4);
         GLUquadricObj* Sphere;
         Sphere=gluNewQuadric();
+        gluQuadricOrientation(Sphere,GLU_OUTSIDE);
         gluQuadricTexture(Sphere,1);
         gluSphere(Sphere,0.5,20,20);
       glPopMatrix();

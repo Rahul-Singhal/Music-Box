@@ -15,7 +15,8 @@ bool textureLoader::readImage(){
 
 	FILE * file = fopen(imagepath,"rb");
 	if (!file){
-		printf("Image could not be opened\n"); return false;
+
+		cout<<imagepath<<endl; return false;
 	}
 	//read the first 54 bytes to confirm if the texture is correct BMP
 	if (fread(header, 1, 54, file)!=54 ){ 
