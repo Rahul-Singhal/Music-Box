@@ -676,57 +676,196 @@ void man::specialKey(int key, int x, int y) {
 	}
 }
 
-void man::print(){
-	cout<<"neck1 "<<neck1<<endl;
-	cout<<"neck2 "<<neck2<<endl;
-	cout<<"neck3 "<<neck3<<endl;
+void man::setState(FILE * fp, int numFrames){
 
-	cout<<"shoulderLeft1 "<<shoulderLeft1<<endl;
-	cout<<"shoulderLeft2 "<<shoulderLeft2<<endl;
-	cout<<"shoulderLeft3 "<<shoulderLeft3<<endl;
+	fscanf(fp, "%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,", 
+		&neck1IF, &neck2IF, &neck3IF,
+		&shoulderLeft1IF,&shoulderLeft2IF,&shoulderLeft3IF,
+		&shoulderRight1IF,&shoulderRight2IF,&shoulderRight3IF,
+		&wristLeft1IF,&wristLeft2IF,&wristLeft3IF,
+		&wristRight1IF,&wristRight2IF,&wristRight3IF,
+		&ankleLeft1IF,&ankleLeft2IF,&ankleLeft3IF,
+		&ankleRight1IF,&ankleRight2IF,&ankleRight3IF,
+		&hipLeft1IF,&hipLeft2IF,&hipLeft3IF,
+		&hipRight1IF,&hipRight2IF,&hipRight3IF,
+		&elbowLeftIF,&elbowRightIF,
+		&kneeLeftIF, &kneeRightIF,
+		&torso11IF, &torso12IF, &torso13IF,
+		&torso21IF, &torso22IF, &torso23IF
+		);
 
-	cout<<"shoulderRight1 "<<shoulderRight1<<endl;
-	cout<<"shoulderRight2 "<<shoulderRight2<<endl;
-	cout<<"shoulderRight3 "<<shoulderRight3<<endl;
+	neck1IF = (neck1IF - neck1)/numFrames;
+	neck2IF = (neck2IF - neck2)/numFrames;
+	neck3IF = (neck3IF - neck3)/numFrames;
+
+	shoulderLeft1IF = (shoulderLeft1IF - shoulderLeft1)/numFrames;
+	shoulderLeft2IF = (shoulderLeft2IF - shoulderLeft2)/numFrames;
+	shoulderLeft3IF = (shoulderLeft3IF - shoulderLeft3)/numFrames;
+
+	shoulderRight1IF = (shoulderRight1IF - shoulderRight1)/numFrames;
+	shoulderRight2IF = (shoulderRight2IF - shoulderRight2)/numFrames;
+	shoulderRight3IF = (shoulderRight3IF - shoulderRight3)/numFrames;
+
+	wristLeft1IF = (wristLeft1IF - wristLeft1)/numFrames;
+	wristLeft2IF = (wristLeft2IF - wristLeft2)/numFrames;
+	wristLeft3IF = (wristLeft3IF - wristLeft3)/numFrames;
+
+	wristRight1IF = (wristRight1IF - wristRight1)/numFrames;
+	wristRight2IF = (wristRight2IF - wristRight2)/numFrames;
+	wristRight3IF = (wristRight3IF - wristRight3)/numFrames;
+
+	ankleLeft1IF = (ankleLeft1IF - ankleLeft1)/numFrames;
+	ankleLeft2IF = (ankleLeft2IF - ankleLeft2)/numFrames;
+	ankleLeft3IF = (ankleLeft3IF - ankleLeft3)/numFrames;
+
+	ankleRight1IF = (ankleRight1IF - ankleRight1)/numFrames;
+	ankleRight2IF = (ankleRight2IF - ankleRight2)/numFrames;
+	ankleRight3IF = (ankleRight3IF - ankleRight3)/numFrames;
+
+	hipLeft1IF = (hipLeft1IF - hipLeft1)/numFrames;
+	hipLeft2IF = (hipLeft2IF - hipLeft2)/numFrames;
+	hipLeft3IF = (hipLeft3IF - hipLeft3)/numFrames;
+
+	hipRight1IF = (hipRight1IF - hipRight1)/numFrames;
+	hipRight2IF = (hipRight2IF - hipRight2)/numFrames;
+	hipRight3IF = (hipRight3IF - hipRight3)/numFrames;
+
+	elbowLeftIF = (elbowLeftIF - elbowLeft)/numFrames;
+	elbowRightIF = (elbowRightIF - elbowRight)/numFrames;
+
+	kneeLeftIF = (kneeLeftIF - kneeLeft)/numFrames;
+	kneeRightIF = (kneeRightIF - kneeRight)/numFrames;
+
+	torso11IF = (torso11IF - torso11)/numFrames;
+	torso12IF = (torso12IF - torso12)/numFrames;
+	torso13IF = (torso13IF - torso13)/numFrames;
+
+	torso21IF = (torso21IF - torso21)/numFrames;
+	torso22IF = (torso22IF - torso22)/numFrames;
+	torso23IF = (torso23IF - torso23)/numFrames;
+
+	return;
+}
+
+void man::nextFrame(){
+	neck1 += neck1IF;
+	neck2 += neck2IF;
+	neck3 += neck3IF;
+
+	shoulderLeft1 += shoulderLeft1IF;
+	shoulderLeft2 += shoulderLeft2IF;
+	shoulderLeft3 += shoulderLeft3IF;
+
+	shoulderRight1 += shoulderRight1IF;
+	shoulderRight2 += shoulderRight2IF;
+	shoulderRight3 += shoulderRight3IF;
+
+	wristLeft1 += wristLeft1IF;
+	wristLeft2 += wristLeft2IF;
+	wristLeft3 += wristLeft3IF;
+
+	wristRight1 += wristRight1IF;	
+	wristRight2 += wristRight2IF;	
+	wristRight3 += wristRight3IF;
+
+	ankleLeft1 += ankleLeft1IF;
+	ankleLeft2 += ankleLeft2IF;
+	ankleLeft3 += ankleLeft3IF;
+
+	ankleRight1 += ankleRight1IF;
+	ankleRight2 += ankleRight2IF;
+	ankleRight3 += ankleRight3IF;
+
+	hipLeft1 += hipLeft1IF;
+	hipLeft2 += hipLeft2IF;
+	hipLeft3 += hipLeft3IF;
+
+	hipRight1 += hipRight1IF;
+	hipRight2 += hipRight2IF;
+	hipRight3 += hipRight3IF;
+
+	elbowLeft += elbowLeftIF;
+	elbowRight += elbowRightIF;
+
+	kneeLeft += kneeLeftIF;
+	kneeRight += kneeRightIF;
+
+	torso11 += torso11IF;
+	torso12 += torso12IF;
+	torso13 += torso13IF;
+
+	torso21 += torso21IF;
+	torso22 += torso22IF;
+	torso23 += torso23IF;
+}
+
+void man::getState(FILE * fp){
+
+	fprintf(fp, "%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,", 
+		neck1, neck2, neck3,
+		shoulderLeft1,shoulderLeft2,shoulderLeft3,
+		shoulderRight1,shoulderRight2,shoulderRight3,
+		wristLeft1,wristLeft2,wristLeft3,
+		wristRight1,wristRight2,wristRight3,
+		ankleLeft1,ankleLeft2,ankleLeft3,
+		ankleRight1,ankleRight2,ankleRight3,
+		hipLeft1,hipLeft2,hipLeft3,
+		hipRight1,hipRight2,hipRight3,
+		elbowLeft,elbowRight,
+		kneeLeft, kneeRight,
+		torso11, torso12, torso13,
+		torso21, torso22, torso23
+		);
+	// cout<<"neck1 "<<neck1<<endl;
+	// cout<<"neck2 "<<neck2<<endl;
+	// cout<<"neck3 "<<neck3<<endl;
+
+	// cout<<"shoulderLeft1 "<<shoulderLeft1<<endl;
+	// cout<<"shoulderLeft2 "<<shoulderLeft2<<endl;
+	// cout<<"shoulderLeft3 "<<shoulderLeft3<<endl;
+
+	// cout<<"shoulderRight1 "<<shoulderRight1<<endl;
+	// cout<<"shoulderRight2 "<<shoulderRight2<<endl;
+	// cout<<"shoulderRight3 "<<shoulderRight3<<endl;
 
 
-	cout<<"wristLeft1 "<<wristLeft1<<endl;
-	cout<<"wristLeft2 "<<wristLeft2<<endl;
-	cout<<"wristLeft3 "<<wristLeft3<<endl;
+	// cout<<"wristLeft1 "<<wristLeft1<<endl;
+	// cout<<"wristLeft2 "<<wristLeft2<<endl;
+	// cout<<"wristLeft3 "<<wristLeft3<<endl;
 
-	cout<<"wristRight1 "<<wristRight1<<endl;
-	cout<<"wristRight2 "<<wristRight2<<endl;
-	cout<<"wristRight3 "<<wristRight3<<endl;
+	// cout<<"wristRight1 "<<wristRight1<<endl;
+	// cout<<"wristRight2 "<<wristRight2<<endl;
+	// cout<<"wristRight3 "<<wristRight3<<endl;
 
-	cout<<"ankleLeft1 "<<ankleLeft1<<endl;
-	cout<<"ankleLeft2 "<<ankleLeft2<<endl;
-	cout<<"ankleLeft3 "<<ankleLeft3<<endl;
+	// cout<<"ankleLeft1 "<<ankleLeft1<<endl;
+	// cout<<"ankleLeft2 "<<ankleLeft2<<endl;
+	// cout<<"ankleLeft3 "<<ankleLeft3<<endl;
 
-	cout<<"ankleRight1 "<<ankleRight1<<endl;
-	cout<<"ankleRight2 "<<ankleRight2<<endl;
-	cout<<"ankleRight3 "<<ankleRight3<<endl;
+	// cout<<"ankleRight1 "<<ankleRight1<<endl;
+	// cout<<"ankleRight2 "<<ankleRight2<<endl;
+	// cout<<"ankleRight3 "<<ankleRight3<<endl;
 
-	cout<<"hipLeft1 "<<hipLeft1<<endl;
-	cout<<"hipLeft2 "<<hipLeft2<<endl;
-	cout<<"hipLeft3 "<<hipLeft3<<endl;
+	// cout<<"hipLeft1 "<<hipLeft1<<endl;
+	// cout<<"hipLeft2 "<<hipLeft2<<endl;
+	// cout<<"hipLeft3 "<<hipLeft3<<endl;
 
-	cout<<"hipRight1 "<<hipRight1<<endl;
-	cout<<"hipRight2 "<<hipRight2<<endl;
-	cout<<"hipRight3 "<<hipRight3<<endl;
+	// cout<<"hipRight1 "<<hipRight1<<endl;
+	// cout<<"hipRight2 "<<hipRight2<<endl;
+	// cout<<"hipRight3 "<<hipRight3<<endl;
 
-	cout<<"elbowLeft "<<elbowLeft<<endl;
-	cout<<"elbowRight "<<elbowRight<<endl;
+	// cout<<"elbowLeft "<<elbowLeft<<endl;
+	// cout<<"elbowRight "<<elbowRight<<endl;
 
-	cout<<"kneeLeft "<<kneeLeft<<endl;
-	cout<<"kneeRight "<<kneeRight<<endl;
+	// cout<<"kneeLeft "<<kneeLeft<<endl;
+	// cout<<"kneeRight "<<kneeRight<<endl;
 
-	cout<<"torso11 "<<torso11<<endl;
-	cout<<"torso12 "<<torso12<<endl;
-	cout<<"torso13 "<<torso13<<endl;
+	// cout<<"torso11 "<<torso11<<endl;
+	// cout<<"torso12 "<<torso12<<endl;
+	// cout<<"torso13 "<<torso13<<endl;
 
-	cout<<"torso21 "<<torso21<<endl;
-	cout<<"torso22 "<<torso22<<endl;
-	cout<<"torso23 "<<torso23<<endl;
+	// cout<<"torso21 "<<torso21<<endl;
+	// cout<<"torso22 "<<torso22<<endl;
+	// cout<<"torso23 "<<torso23<<endl;
 }
 
 void man::processNormalKeys(unsigned char key, int x, int y) 
@@ -768,9 +907,9 @@ void man::processNormalKeys(unsigned char key, int x, int y)
   	mode = 'B';
   }
 
-  if(key == 'p' || key == 'P'){
-  	print();
-  }
+  // if(key == 'p' || key == 'P'){
+  // 	print();
+  // }
 
   if(key == 'R' || key == 'r'){
   		subMode = 'R';

@@ -5,9 +5,13 @@
 #include <iostream>
 #include <string>
 #include <cmath>
+#include <cstdio>
 #include <GL/glut.h>
 #include "man.h"
 using namespace std;
+
+
+//state of box {baseHeight,lidAngle}
 
 
 class box{
@@ -22,8 +26,11 @@ private:
 	 GLuint texture1 ;
 	 GLuint texture2 ;
 	 GLuint texture3 ;
+	 //state variables
 	 float baseHeight;
 	 float lidAngle;
+	 float baseHeightIF;
+	 float lidAngleIF;
 
 	/*enumerate box struct functions*/
 	void initBottomBox();
@@ -44,6 +51,10 @@ public:
 	box();
 	void draw();
 	void resetBox(float lidAngle, float baseHeight);
+	//this function will append the state of box in the file
+	void getState(FILE * fp);
+	bool setState(FILE * fp, int numFrames);
+	void nextFrame();
 
 };
 

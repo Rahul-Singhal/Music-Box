@@ -9,12 +9,14 @@
 #include "furniture.h"
 #include "shelf.h"
 #include <vector>
+#include <cstdio>
 using namespace std;
 
-char MODE = 'N';
-bool SUBMODE = false;
-bool modeChange = false;
-bool bezier_flag=false;
+int numFrames = 10;
+int curFrame;
+
+FILE * keyFrameFile;
+
 box * myBox;
 man * myMan;
 room * myRoom;
@@ -25,10 +27,19 @@ furniture * myFurniture2;
 shelf * myShelf;
 shelf * sideShelf1;
 shelf * sideShelf2;
+
+bool recordMode = false;
+
+static int numPoints = 300;
+static int lidAngle = 0;
+static float baseHeight = 0.1;
+
+char MODE = 'N';
+bool SUBMODE = false;
+bool modeChange = false;
+bool bezier_flag=false;
 bool lighting1 = false;
 bool lighting2 = false;
-static int numPoints = 300;
-
 
 GLfloat xAngle = 19.8f;  // Rotational angle about the x-axis
 GLfloat yAngle = -61.2f;  // Rotational angle about the y-axis
@@ -36,21 +47,45 @@ static float angle=0.0;
 static float x=0.2f,y=0.0f,z=19.6f;
 static float lx=0.0f,ly=0.0f,lz=-1.0f;
 static float myratio=1;
-static int lidAngle = 0;
-static float baseHeight = 0.1;
 static float translateV = 9.6;
 static float translateV_local = 9.6;
 
 static float u=0;
-static vector< vector <float> > bezPoints;
 static float xCube=0,yCube=0,zCube=0;
-
-
-
-static vector<vector<float> > control_points;
 static char MODEDIV = 'Q';
 static float interPar=0.0f;
 static double unX=0.0f,unY=0.0f,unZ=0.0f;
+
+
+static int numPointsIF = 300;
+static int lidAngleIF = 0;
+static float baseHeightIF = 0.1;
+
+char MODEIF = 'N';
+bool SUBMODEIF = false;
+bool modeChangeIF = false;
+bool bezier_flagIF=false;
+bool lighting1IF = false;
+bool lighting2IF = false;
+
+GLfloat xAngleIF = 19.8f;  // Rotational angle about the x-axis
+GLfloat yAngleIF = -61.2f;  // Rotational angle about the y-axis
+static float angleIF=0.0;
+static float xIF=0.2f,yIF=0.0f,zIF=19.6f;
+static float lxIF=0.0f,lyIF=0.0f,lzIF=-1.0f;
+static float myratioIF=1;
+static float translateVIF = 9.6;
+static float translateV_localIF = 9.6;
+
+static float uIF=0;
+static float xCubeIF=0,yCubeIF=0,zCubeIF=0;
+static char MODEDIVIF = 'Q';
+static float interParIF=0.0f;
+static double unXIF=0.0f,unYIF=0.0f,unZIF=0.0f;
+
+
+static vector< vector <float> > bezPoints;
+static vector<vector<float> > control_points;
 
 
 //Function Definitions
@@ -67,6 +102,208 @@ GLfloat light_position1[]={0,13.6,0, 1.0};
 GLfloat light_diffuse1[]={0.5,0.5,0.5, 1.0};
 GLfloat light_specular1[]={0.0, 0.0, 0.0, 1.0};
 GLfloat light_ambient1[]={0.3, 0.3, 0.3, 1.0};
+
+void saveState(){
+  myBox->getState(keyFrameFile);
+  myMan->getState(keyFrameFile);
+  fprintf(keyFrameFile, "%d,%f,%d,%c,%d,%d,%d,%d,%d,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%c,%f,%g,%g,%g\n", 
+    numPoints, baseHeight,lidAngle,MODE,SUBMODE,modeChange,bezier_flag,lighting1,lighting2,xAngle,yAngle,angle,x,y,z,
+    lx,ly,lz,myratio,translateV,translateV_local,u,xCube,yCube,zCube,MODEDIV,interPar,unX,unY,unZ);
+}
+
+void playBack(){
+  if(!myBox->setState(keyFrameFile, 1)) return;
+  myMan->setState(keyFrameFile, 1);
+  fscanf(keyFrameFile, "%d,%f,%d,%c,%d,%d,%d,%d,%d,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%c,%f,%g,%g,%g\n", 
+    &numPointsIF, &baseHeightIF,&lidAngleIF,&MODEIF,&SUBMODEIF,&modeChangeIF,&bezier_flagIF,&lighting1IF,&lighting2IF,&xAngleIF,&yAngleIF,&angleIF,&xIF,&yIF,&zIF,
+    &lxIF,&lyIF,&lzIF,&myratioIF,&translateVIF,&translateV_localIF,&uIF,&xCubeIF,&yCubeIF,&zCubeIF,&MODEDIVIF,&interParIF,&unXIF,&unYIF,&unZIF);
+  
+  setInitialFrame();
+  glutPostRedisplay();
+
+  setState();
+  interPolateFrames(1);
+}
+
+void interPolateFrames(int i){
+  if(i > numFrames){
+    if(setState()) glutTimerFunc(20, interPolateFrames, 1);
+    else return;
+  }
+  else{
+    nextFrame();
+    //after every 20 ms
+    glutTimerFunc(20, interPolateFrames, i+1);
+  }
+}
+
+bool setState(){
+  //check if the file has ended!
+  if(!myBox->setState(keyFrameFile, numFrames)){
+    //file ended
+    return false;
+  } 
+  myMan->setState(keyFrameFile, numFrames);
+  fscanf(keyFrameFile, "%d,%f,%d,%c,%d,%d,%d,%d,%d,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%c,%f,%g,%g,%g\n", 
+    &numPointsIF, &baseHeightIF,&lidAngleIF,&MODEIF,&SUBMODEIF,&modeChangeIF,&bezier_flagIF,&lighting1IF,&lighting2IF,&xAngleIF,&yAngleIF,&angleIF,&xIF,&yIF,&zIF,
+    &lxIF,&lyIF,&lzIF,&myratioIF,&translateVIF,&translateV_localIF,&uIF,&xCubeIF,&yCubeIF,&zCubeIF,&MODEDIVIF,&interParIF,&unXIF,&unYIF,&unZIF);
+
+  //numPoints = numPointsIF;
+  //baseHeight = baseHeightIF;
+  //lidAngle = lidAngleIF;
+  //MODE = MODEIF;
+  //SUBMODE = SUBMODEIF;
+  //modeChange = modeChangeIF;
+  ///bezier_flag = bezier_flagIF;
+  //lighting1 = lighting1IF;
+  //lighting2 = lighting2IF;
+  xAngleIF = (xAngleIF - xAngle)/numFrames;
+  yAngleIF = (yAngleIF - yAngle)/numFrames;
+  angleIF = (angleIF - angle)/numFrames;
+  xIF = (xIF - x)/numFrames;
+  yIF = (yIF - y)/numFrames;
+  zIF = (zIF - z)/numFrames;
+
+  lxIF = (lxIF - lx)/numFrames;
+  lyIF = (lyIF - lx)/numFrames;
+  lzIF = (lzIF - lz)/numFrames;
+  myratioIF = (myratioIF - myratio)/numFrames;
+  translateVIF = (translateVIF - translateV)/numFrames;
+  translateV_localIF = (translateV_localIF - translateV_local)/numFrames;
+  uIF = (uIF - u)/numFrames;
+  xCubeIF = (xCubeIF - xCube)/numFrames;
+  yCubeIF = (yCubeIF - yCube)/numFrames;
+  zCubeIF = (zCubeIF - zCube)/numFrames;
+  //MODEDIV = MODEDIVIF;
+  interParIF = (interParIF - interPar)/numFrames;
+  unXIF = (unXIF - unX)/numFrames;
+  unYIF = (unYIF - unY)/numFrames;
+  unZIF = (unZIF - unZ)/numFrames;
+
+  return true;
+}
+
+void nextFrame(){
+  if(curFrame == numFrames){
+
+    myBox->nextFrame();
+    myMan->nextFrame();
+    baseHeight += baseHeightIF;
+    lidAngle += lidAngleIF;
+    MODE = MODEIF;
+    SUBMODE = SUBMODEIF;
+    modeChange = modeChangeIF;
+    bezier_flag = bezier_flagIF;
+    lighting1 = lighting1IF;
+    lighting2 = lighting2IF;
+    xAngle += xAngleIF;
+    yAngle += yAngleIF;
+    angle += angleIF;
+    x += xIF;
+    y += yIF;
+    z += zIF;
+
+    lx += lxIF;
+    ly += lyIF;
+    lz += lzIF;
+    myratio += myratioIF;
+    translateV += translateVIF;
+    translateV_local += translateV_localIF;
+    u += uIF;
+    xCube += xCubeIF;
+    yCube += yCubeIF;
+    zCube += zCubeIF;
+    MODEDIV = MODEDIVIF;
+    interPar += interParIF;
+    unX += unXIF;
+    unY += unYIF;
+    unZ += unZIF;
+
+    glutPostRedisplay();
+    return;
+  }
+  else{
+
+    myBox->nextFrame();
+    myMan->nextFrame();
+    
+    //numPoints += numPointsIF;
+    baseHeight += baseHeightIF;
+    lidAngle += lidAngleIF;
+    //MODE = MODEIF;
+    //SUBMODE = SUBMODEIF;
+    //modeChange = modeChangeIF;
+    //bezier_flag = bezier_flagIF;
+    //lighting1 = lighting1IF;
+    //lighting2 = lighting2IF;
+    xAngle += xAngleIF;
+    yAngle += yAngleIF;
+    angle += angleIF;
+    x += xIF;
+    y += yIF;
+    z += zIF;
+
+    lx += lxIF;
+    ly += lyIF;
+    lz += lzIF;
+    myratio += myratioIF;
+    translateV += translateVIF;
+    translateV_local += translateV_localIF;
+    u += uIF;
+    xCube += xCubeIF;
+    yCube += yCubeIF;
+    zCube += zCubeIF;
+    //MODEDIV = MODEDIVIF;
+    interPar += interParIF;
+    unX += unXIF;
+    unY += unYIF;
+    unZ += unZIF;
+
+    curFrame++;
+    glutPostRedisplay();
+  }
+}
+
+
+
+void setInitialFrame(){
+  myBox->nextFrame();
+  myMan->nextFrame();
+  
+  numPoints = numPointsIF;
+  baseHeight = baseHeightIF;
+  lidAngle = lidAngleIF;
+  MODE = MODEIF;
+  SUBMODE = SUBMODEIF;
+  modeChange = modeChangeIF;
+  bezier_flag = bezier_flagIF;
+  lighting1 = lighting1IF;
+  lighting2 = lighting2IF;
+  xAngle = xAngleIF;
+  yAngle = yAngleIF;
+  angle = angleIF;
+  x = xIF;
+  y = yIF;
+  z = zIF;
+
+  lx = lxIF;
+  ly = lyIF;
+  lz = lzIF;
+  myratio = myratioIF;
+  translateV = translateVIF;
+  translateV_local = translateV_localIF;
+  u = uIF;
+  xCube = xCubeIF;
+  yCube = yCubeIF;
+  zCube = zCubeIF;
+  MODEDIV = MODEDIVIF;
+  interPar = interParIF;
+  unX = unXIF;
+  unY = unYIF;
+  unZ = unZIF;
+
+  return;
+}
 
 
 
@@ -196,6 +433,11 @@ void moveMeTangent(int i)
 
 void specialKey(int key, int x, int y) 
 {
+  if(recordMode && (key == GLUT_KEY_F10)){
+    saveState();
+    return; 
+  }
+
   if(MODE == 'N'  || MODE == 'E'){
     switch (key) {
     case GLUT_KEY_F3 : angle -= 0.05f;orientMe(angle);break;
@@ -236,7 +478,10 @@ void specialKey(int key, int x, int y)
 
 void processNormalKeys(unsigned char key, int x, int y) 
 {
-  if (key == 27) exit(0);
+  if (key == 27) {
+    if(keyFrameFile) fclose(keyFrameFile);
+    exit(0);
+  }
   if(modeChange){
     if(key == 'N' || key == 'n') MODE = 'N';
     if(key == 'M' || key == 'm') MODE = 'M';
@@ -252,6 +497,17 @@ void processNormalKeys(unsigned char key, int x, int y)
     }
     if(key == '6') {lighting1 = !lighting1; glutPostRedisplay();} 
     if(key == '7') {lighting2 = !lighting2; glutPostRedisplay();} 
+    if(key == 'R' || key == 'r') {
+      //turn on the record mode
+      recordMode =  !(recordMode);
+      cout<<"Record mode toggled!"<<endl;
+      if(recordMode){
+        keyFrameFile = fopen ("keyframes.txt","w+");
+      }
+      else{
+        if(keyFrameFile) fclose(keyFrameFile);
+      }
+    }
     modeChange = false;
     return;
   }
@@ -364,7 +620,7 @@ void processNormalKeys(unsigned char key, int x, int y)
 void GetOGLPos(int x, int y)
 {
    
-    double modelview[16], projection[16];
+  double modelview[16], projection[16];
   int viewport[4];
   float z = 1;
   
@@ -380,9 +636,22 @@ void GetOGLPos(int x, int y)
 
 //position of lamp light is (2,4.6,-5.8)
 
-void display( void )
+void display()
 {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+  glDisable(GL_TEXTURE_2D);
+  glPushMatrix();
+  glTranslatef(0,translateV-16.5  ,0);
+  glBegin(GL_QUADS);
+    glColor3f(0,0,0);
+    glVertex3f(1000,0,1000);
+    glVertex3f(1000,0,-1000);
+    glVertex3f(-1000,0,-1000);
+    glVertex3f(-1000,0,1000);
+  glEnd();
+  glPopMatrix();
+  glColor3f(1,1,1);
 
     if(bezier_flag==true && MODE=='E'){
         glMatrixMode(GL_PROJECTION);
@@ -602,6 +871,7 @@ void init(){
   glLightfv(GL_LIGHT1, GL_DIFFUSE, light_diffuse1);
   glLightfv(GL_LIGHT1, GL_SPECULAR, light_specular1);
   glLightfv(GL_LIGHT1, GL_AMBIENT, light_ambient1);
+
 }
 
 int main (int argc, char *argv[]) 

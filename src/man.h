@@ -5,8 +5,24 @@
 #include <iostream>
 #include <string>
 #include <cmath>
+#include <cstdio>
 #include <GL/glut.h>
 using namespace std;
+
+//state of man is:
+// neck1, neck2, neck3,
+// shoulderLeft1,shoulderLeft2,shoulderLeft3,
+// shoulderRight1,shoulderRight2,shoulderRight3,
+// wristLeft1,wristLeft2,wristLeft3,
+// wristRight1,wristRight2,wristRight3,
+// ankleLeft1,ankleLeft2,ankleLeft3,
+// ankleRight1,ankleRight2,ankleRight3,
+// hipLeft1,hipLeft2,hipLeft3,
+// hipRight1,hipRight2,hipRight3,
+// elbowLeft,elbowRight,
+// kneeLeft, kneeRight,
+// torso11, torso12, torso13,
+// torso21, torso22, torso23
 
 class man{
 private:
@@ -14,36 +30,51 @@ private:
 	char subMode;
 
 	float neck1,neck2,neck3;
+	float neck1IF,neck2IF,neck3IF;
 	float neckFactor;
 
 	float shoulderLeft1,shoulderLeft2,shoulderLeft3;
+	float shoulderLeft1IF,shoulderLeft2IF,shoulderLeft3IF;
 	float shoulderFactor;
 	float shoulderRight1,shoulderRight2,shoulderRight3;
+	float shoulderRight1IF,shoulderRight2IF,shoulderRight3IF;
 
 	float elbowLeft;
+	float elbowLeftIF;
 	float elbowFactor;
 	float elbowRight;
+	float elbowRightIF;
 
 	float wristLeft1,wristLeft2,wristLeft3;
+	float wristLeft1IF,wristLeft2IF,wristLeft3IF;
 	float wristFactor;
 	float wristRight1,wristRight2,wristRight3;
+	float wristRight1IF,wristRight2IF,wristRight3IF;
 
 	float hipLeft1,hipLeft2,hipLeft3;
+	float hipLeft1IF,hipLeft2IF,hipLeft3IF;
 	float hipFactor;
 	float hipRight1,hipRight2,hipRight3;
+	float hipRight1IF,hipRight2IF,hipRight3IF;
 
 	float ankleLeft1,ankleLeft2,ankleLeft3;
+	float ankleLeft1IF,ankleLeft2IF,ankleLeft3IF;
 	float ankleFactor;
 	float ankleRight1,ankleRight2,ankleRight3;
+	float ankleRight1IF,ankleRight2IF,ankleRight3IF;
 
 	float kneeLeft;
+	float kneeLeftIF;
 	float kneeFactor;
 	float kneeRight;
+	float kneeRightIF;
 
 	float torso11,torso12,torso13;
+	float torso11IF,torso12IF,torso13IF;
 	float torso1Factor;
 
 	float torso21,torso22,torso23;
+	float torso21IF,torso22IF,torso23IF;
 	float torso2Factor;
 
 	float angleTheta,angleAlpha;
@@ -147,13 +178,15 @@ private:
 	void struct_ankle();
 	void struct_hand();
 	void struct_foot();
-	void print();
 
 public:
 	man();
 	void draw();
 	void processNormalKeys(unsigned char key, int x, int y);
 	void specialKey(int key, int x, int y);
+	void getState(FILE * fp);
+	void setState(FILE * fp, int numFrames);
+	void nextFrame();
 };
 
 #endif

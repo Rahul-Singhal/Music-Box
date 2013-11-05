@@ -1,6 +1,26 @@
 #include "box.h"
 #include "textureLoader.h"
 
+void box::getState(FILE * fp){
+  fprintf(fp, "%f,%f," , baseHeight, lidAngle);
+  return;
+}
+
+bool box::setState(FILE * fp, int numFrames){
+  if(fscanf(fp, "%f,%f," , &baseHeightIF, &lidAngleIF)){
+    baseHeightIF = (baseHeightIF - baseHeight)/numFrames;
+    lidAngleIF = (lidAngleIF - lidAngle)/numFrames;
+    return true;
+  }
+  else return false;
+}
+
+void box::nextFrame(){
+  baseHeight += baseHeightIF;
+  lidAngle += lidAngleIF;
+  return;
+}
+
 void box::drawBox(GLfloat size, GLenum type)
 {
   static GLfloat n[6][3] =
