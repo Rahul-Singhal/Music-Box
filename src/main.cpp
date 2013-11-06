@@ -103,26 +103,18 @@ GLfloat light_diffuse1[]={0.5,0.5,0.5, 1.0};
 GLfloat light_specular1[]={0.0, 0.0, 0.0, 1.0};
 GLfloat light_ambient1[]={0.3, 0.3, 0.3, 1.0};
 
+
+bool setState();
+void nextFrame();
+void setInitialFrame();
+
+
 void saveState(){
   myBox->getState(keyFrameFile);
   myMan->getState(keyFrameFile);
   fprintf(keyFrameFile, "%d,%f,%d,%c,%d,%d,%d,%d,%d,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%c,%f,%g,%g,%g\n", 
     numPoints, baseHeight,lidAngle,MODE,SUBMODE,modeChange,bezier_flag,lighting1,lighting2,xAngle,yAngle,angle,x,y,z,
     lx,ly,lz,myratio,translateV,translateV_local,u,xCube,yCube,zCube,MODEDIV,interPar,unX,unY,unZ);
-}
-
-void playBack(){
-  if(!myBox->setState(keyFrameFile, 1)) return;
-  myMan->setState(keyFrameFile, 1);
-  fscanf(keyFrameFile, "%d,%f,%d,%c,%d,%d,%d,%d,%d,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%c,%f,%g,%g,%g\n", 
-    &numPointsIF, &baseHeightIF,&lidAngleIF,&MODEIF,&SUBMODEIF,&modeChangeIF,&bezier_flagIF,&lighting1IF,&lighting2IF,&xAngleIF,&yAngleIF,&angleIF,&xIF,&yIF,&zIF,
-    &lxIF,&lyIF,&lzIF,&myratioIF,&translateVIF,&translateV_localIF,&uIF,&xCubeIF,&yCubeIF,&zCubeIF,&MODEDIVIF,&interParIF,&unXIF,&unYIF,&unZIF);
-  
-  setInitialFrame();
-  glutPostRedisplay();
-
-  setState();
-  interPolateFrames(1);
 }
 
 void interPolateFrames(int i){
@@ -181,6 +173,61 @@ bool setState(){
   unZIF = (unZIF - unZ)/numFrames;
 
   return true;
+}
+
+
+
+void playBack(){
+  if(!myBox->setState(keyFrameFile, 1)) return;
+  myMan->setState(keyFrameFile, 1);
+  fscanf(keyFrameFile, "%d,%f,%d,%c,%d,%d,%d,%d,%d,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%c,%f,%g,%g,%g\n", 
+    &numPointsIF, &baseHeightIF,&lidAngleIF,&MODEIF,&SUBMODEIF,&modeChangeIF,&bezier_flagIF,&lighting1IF,&lighting2IF,&xAngleIF,&yAngleIF,&angleIF,&xIF,&yIF,&zIF,
+    &lxIF,&lyIF,&lzIF,&myratioIF,&translateVIF,&translateV_localIF,&uIF,&xCubeIF,&yCubeIF,&zCubeIF,&MODEDIVIF,&interParIF,&unXIF,&unYIF,&unZIF);
+  
+  setInitialFrame();
+  glutPostRedisplay();
+
+  setState();
+  interPolateFrames(1);
+}
+
+void setInitialFrame(){
+  myBox->nextFrame();
+  myMan->nextFrame();
+  
+  numPoints = numPointsIF;
+  baseHeight = baseHeightIF;
+  lidAngle = lidAngleIF;
+  MODE = MODEIF;
+  SUBMODE = SUBMODEIF;
+  modeChange = modeChangeIF;
+  bezier_flag = bezier_flagIF;
+  lighting1 = lighting1IF;
+  lighting2 = lighting2IF;
+  xAngle = xAngleIF;
+  yAngle = yAngleIF;
+  angle = angleIF;
+  x = xIF;
+  y = yIF;
+  z = zIF;
+
+  lx = lxIF;
+  ly = lyIF;
+  lz = lzIF;
+  myratio = myratioIF;
+  translateV = translateVIF;
+  translateV_local = translateV_localIF;
+  u = uIF;
+  xCube = xCubeIF;
+  yCube = yCubeIF;
+  zCube = zCubeIF;
+  MODEDIV = MODEDIVIF;
+  interPar = interParIF;
+  unX = unXIF;
+  unY = unYIF;
+  unZ = unZIF;
+
+  return;
 }
 
 void nextFrame(){
@@ -262,47 +309,6 @@ void nextFrame(){
     curFrame++;
     glutPostRedisplay();
   }
-}
-
-
-
-void setInitialFrame(){
-  myBox->nextFrame();
-  myMan->nextFrame();
-  
-  numPoints = numPointsIF;
-  baseHeight = baseHeightIF;
-  lidAngle = lidAngleIF;
-  MODE = MODEIF;
-  SUBMODE = SUBMODEIF;
-  modeChange = modeChangeIF;
-  bezier_flag = bezier_flagIF;
-  lighting1 = lighting1IF;
-  lighting2 = lighting2IF;
-  xAngle = xAngleIF;
-  yAngle = yAngleIF;
-  angle = angleIF;
-  x = xIF;
-  y = yIF;
-  z = zIF;
-
-  lx = lxIF;
-  ly = lyIF;
-  lz = lzIF;
-  myratio = myratioIF;
-  translateV = translateVIF;
-  translateV_local = translateV_localIF;
-  u = uIF;
-  xCube = xCubeIF;
-  yCube = yCubeIF;
-  zCube = zCubeIF;
-  MODEDIV = MODEDIVIF;
-  interPar = interParIF;
-  unX = unXIF;
-  unY = unYIF;
-  unZ = unZIF;
-
-  return;
 }
 
 
