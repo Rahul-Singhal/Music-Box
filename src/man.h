@@ -6,7 +6,9 @@
 #include <string>
 #include <cmath>
 #include <cstdio>
-#include <GL/glut.h>
+#include <GLUT/glut.h>
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
 using namespace std;
 
 //state of man is:

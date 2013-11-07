@@ -40,7 +40,7 @@ void table::drawCube(GLfloat size, GLenum type)
   }
 }
 
-void APIENTRY table::glutSolidCube(GLdouble size)
+void table::glutSolidCube1(GLdouble size)
 {
   drawCube(size, GL_QUADS);
 }

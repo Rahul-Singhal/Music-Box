@@ -9,6 +9,7 @@ void box::getState(FILE * fp){
 bool box::setState(FILE * fp, int numFrames){
   if(fscanf(fp, "%f,%f," , &baseHeightIF, &lidAngleIF)){
     baseHeightIF = (baseHeightIF - baseHeight)/numFrames;
+      
     lidAngleIF = (lidAngleIF - lidAngle)/numFrames;
     return true;
   }
@@ -18,6 +19,8 @@ bool box::setState(FILE * fp, int numFrames){
 void box::nextFrame(){
   baseHeight += baseHeightIF;
   lidAngle += lidAngleIF;
+  resetBox(lidAngle, baseHeight);
+    
   return;
 }
 
@@ -61,7 +64,7 @@ void box::drawBox(GLfloat size, GLenum type)
   }
 }
 
-void APIENTRY box::glutSolidCube(GLdouble size)
+void box::glutSolidCube1(GLdouble size)
 {
   drawBox(size, GL_QUADS);
 }
@@ -164,7 +167,7 @@ void box::struct_bottomBox(){
   	  /*bottom plane*/
   	  glPushMatrix();
   		  glScalef(3.0f,0.1f,2.0f);
-  		  glutSolidCube(1);
+  		  glutSolidCube1(1);
   	  glPopMatrix();
   	  //glColor3F(0.7,0.45,0.2);
       //glBindTexture(GL_TEXTURE_2D, texture1);
@@ -172,14 +175,14 @@ void box::struct_bottomBox(){
   	  glPushMatrix();
   	  	  glTranslatef(-1.5,0.46,0);
   	      glScalef(0.1f,1.0f,2.0f);
-  	      glutSolidCube(1);
+  	      glutSolidCube1(1);
   	  glPopMatrix();
   	  //glColor3F(0,0,1);
   	  /*right plane*/
   	  glPushMatrix();
   	  	  glTranslatef(1.5,0.46,0);
   	      glScalef(0.1f,1.0f,2.0f);
-  	      glutSolidCube(1);
+  	      glutSolidCube1(1);
   	  glPopMatrix();
   	  
   	  //glColor3F(0.3,0.3,0.3);
@@ -187,7 +190,7 @@ void box::struct_bottomBox(){
   	  glPushMatrix();
   	  	  glTranslatef(0,0.46,-1);
   	      glScalef(3.0f,1.0f,0.1f);
-  	      glutSolidCube(1);
+  	      glutSolidCube1(1);
   	  glPopMatrix();
   	  
   	  //glColor3F(1,0,0);
@@ -195,7 +198,7 @@ void box::struct_bottomBox(){
   	  glPushMatrix();
   	  	  glTranslatef(0,0.46,1);
   	      glScalef(3.0f,1.0f,0.1f);
-  	      glutSolidCube(1);
+  	      glutSolidCube1(1);
   	  glPopMatrix();
     glPopMatrix();
 
@@ -207,7 +210,7 @@ void box::struct_boxBase(){
     glPushMatrix();
       glTranslatef(0,baseHeight,0);
       glScalef(3.0f,0.1f,2.0f);
-      glutSolidCube(1);
+      glutSolidCube1(1);
     glPopMatrix();
 }
 
@@ -222,7 +225,7 @@ void box::struct_boxLid(){
         /*bottom plane*/
         glPushMatrix();
           glScalef(3.0f,0.1f,2.0f);
-          glutSolidCube(1);
+          glutSolidCube1(1);
         glPopMatrix();
         //glColor3F(0.7,0.45,0.2);
         //glBindTexture(GL_TEXTURE_2D, texture1);
@@ -230,14 +233,14 @@ void box::struct_boxLid(){
         glPushMatrix();
             glTranslatef(-1.5,0.46,0);
             glScalef(0.1f,1.0f,2.0f);
-            glutSolidCube(1);
+            glutSolidCube1(1);
         glPopMatrix();
         //glColor3F(0,0,1);
         /*right plane*/
         glPushMatrix();
             glTranslatef(1.5,0.46,0);
             glScalef(0.1f,1.0f,2.0f);
-            glutSolidCube(1);
+            glutSolidCube1(1);
         glPopMatrix();
         
         //glColor3F(0.3,0.3,0.3);
@@ -245,7 +248,7 @@ void box::struct_boxLid(){
         glPushMatrix();
             glTranslatef(0,0.46,-1);
             glScalef(3.0f,1.0f,0.1f);
-            glutSolidCube(1);
+            glutSolidCube1(1);
         glPopMatrix();
         
         //glColor3F(1,0,0);
@@ -253,7 +256,7 @@ void box::struct_boxLid(){
         glPushMatrix();
             glTranslatef(0,0.46,1);
             glScalef(3.0f,1.0f,0.1f);
-            glutSolidCube(1);
+            glutSolidCube1(1);
         glPopMatrix();
       glPopMatrix();
   glPopMatrix();

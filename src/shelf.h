@@ -5,7 +5,9 @@
 #include <iostream>
 #include <string>
 #include <cmath>
-#include <GL/glut.h>
+#include <GLUT/glut.h>
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
 #include "textureLoader.h"
 using namespace std;
 
@@ -29,7 +31,7 @@ private:
 	void struct_shelfOther();
 
 	static void drawCube(GLfloat size, GLenum type);
-	void APIENTRY glutSolidCube(GLdouble size);
+	void glutSolidCube1(GLdouble size);
 public:
 	shelf();
 	void draw();

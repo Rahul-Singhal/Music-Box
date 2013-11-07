@@ -40,7 +40,7 @@ void shelf::drawCube(GLfloat size, GLenum type)
   }
 }
 
-void APIENTRY shelf::glutSolidCube(GLdouble size)
+void shelf::glutSolidCube1(GLdouble size)
 {
   drawCube(size, GL_QUADS);
 }
@@ -114,7 +114,7 @@ void shelf::struct_shelf(){
     glPushMatrix();
       glTranslatef(-1,0,0);
       glScalef(0.2,8.8,2);
-    	glutSolidCube(1);
+    	glutSolidCube1(1);
     glPopMatrix();
 
     glPushMatrix();
@@ -130,7 +130,7 @@ void shelf::struct_shelf(){
     glPushMatrix();
       glTranslatef(1,0,0);
       glScalef(0.2,8.8,2);
-      glutSolidCube(1);
+      glutSolidCube1(1);
     glPopMatrix();
 
     glPushMatrix();
@@ -145,7 +145,7 @@ void shelf::struct_shelf(){
     glPushMatrix();
       glTranslatef(0,-1,0);
       glScalef(8.8,0.2,2);
-      glutSolidCube(1);
+      glutSolidCube1(1);
     glPopMatrix();
 
     glPushMatrix();
@@ -160,7 +160,7 @@ void shelf::struct_shelf(){
     glPushMatrix();
       glTranslatef(0,-3,0);
       glScalef(6,0.2,2);
-      glutSolidCube(1);
+      glutSolidCube1(1);
     glPopMatrix();
 
     glPushMatrix();
@@ -175,7 +175,7 @@ void shelf::struct_shelf(){
     glPushMatrix();
       glTranslatef(0,1,0);
       glScalef(8.8,0.2,2);
-      glutSolidCube(1);
+      glutSolidCube1(1);
     glPopMatrix();
 
     glPushMatrix();
@@ -190,7 +190,7 @@ void shelf::struct_shelf(){
     glPushMatrix();
       glTranslatef(0,3,0);
       glScalef(6,0.2,2);
-      glutSolidCube(1);
+      glutSolidCube1(1);
     glPopMatrix();
 
     glPushMatrix();
@@ -205,28 +205,28 @@ void shelf::struct_shelf(){
     glPushMatrix();
       glTranslatef(3,0,0);
       glScalef(0.1,2,2);
-      glutSolidCube(1);
+      glutSolidCube1(1);
     glPopMatrix();
 
     //right
     glPushMatrix();
       glTranslatef(2.1,0,0);
       glScalef(0.1,2,2);
-      glutSolidCube(1);
+      glutSolidCube1(1);
     glPopMatrix();
 
     //right-mid
     glPushMatrix();
       glTranslatef(1.6,0,0);
       glScalef(1,0.1,2);
-      glutSolidCube(1);
+      glutSolidCube1(1);
     glPopMatrix();
 
     //right-right-mid1
     glPushMatrix();
       glTranslatef(2.5,0.3,0);
       glScalef(0.9,0.1,2);
-      glutSolidCube(1);
+      glutSolidCube1(1);
     glPopMatrix();
 
 
@@ -234,35 +234,35 @@ void shelf::struct_shelf(){
     glPushMatrix();
       glTranslatef(2.5,-0.3,0);
       glScalef(0.9,0.1,2);
-      glutSolidCube(1);
+      glutSolidCube1(1);
     glPopMatrix();
 
     //left-left
     glPushMatrix();
       glTranslatef(-3,0,0);
       glScalef(0.1,2,2);
-      glutSolidCube(1);
+      glutSolidCube1(1);
     glPopMatrix();
 
     //left
     glPushMatrix();
       glTranslatef(-2.1,0,0);
       glScalef(0.1,2,2);
-      glutSolidCube(1);
+      glutSolidCube1(1);
     glPopMatrix();
 
     //left-mid
     glPushMatrix();
       glTranslatef(-1.6,0,0);
       glScalef(1,0.1,2);
-      glutSolidCube(1);
+      glutSolidCube1(1);
     glPopMatrix();
 
     //left-left-mid1
     glPushMatrix();
       glTranslatef(-2.5,0.3,0);
       glScalef(0.9,0.1,2);
-      glutSolidCube(1);
+      glutSolidCube1(1);
     glPopMatrix();
 
 
@@ -270,7 +270,7 @@ void shelf::struct_shelf(){
     glPushMatrix();
       glTranslatef(-2.5,-0.3,0);
       glScalef(0.9,0.1,2);
-      glutSolidCube(1);
+      glutSolidCube1(1);
     glPopMatrix();
 
     //tv
@@ -278,7 +278,7 @@ void shelf::struct_shelf(){
     glPushMatrix();
       glTranslatef(0,-0.2,0);
       glScalef(0.8,0.8,0.6);
-      glutSolidCube(2);
+      glutSolidCube1(2);
     glPopMatrix();
 
     glPushMatrix();
@@ -302,7 +302,7 @@ void shelf::struct_shelfOther(){
     glPushMatrix();
       glTranslatef(-1,0,0);
       glScalef(0.2,2,2);
-      glutSolidCube(1);
+      glutSolidCube1(1);
     glPopMatrix();
 
     glPushMatrix();
@@ -318,7 +318,7 @@ void shelf::struct_shelfOther(){
     glPushMatrix();
       glTranslatef(1,0,0);
       glScalef(0.2,2,2);
-      glutSolidCube(1);
+      glutSolidCube1(1);
     glPopMatrix();
 
     glPushMatrix();
@@ -333,7 +333,7 @@ void shelf::struct_shelfOther(){
     glPushMatrix();
       glTranslatef(0,-1,0);
       glScalef(2,0.2,2);
-      glutSolidCube(1);
+      glutSolidCube1(1);
     glPopMatrix();
 
     glPushMatrix();
@@ -348,7 +348,7 @@ void shelf::struct_shelfOther(){
     glPushMatrix();
       glTranslatef(0,1,0);
       glScalef(2,0.2,2);
-      glutSolidCube(1);
+      glutSolidCube1(1);
     glPopMatrix();
 
     glPushMatrix();

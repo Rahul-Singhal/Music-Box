@@ -40,7 +40,7 @@ void furniture::drawCube(GLfloat size, GLenum type)
   }
 }
 
-void APIENTRY furniture::glutSolidCube(GLdouble size)
+void furniture::glutSolidCube1(GLdouble size)
 {
   drawCube(size, GL_QUADS);
 }
@@ -102,34 +102,34 @@ void furniture::struct_box(){
         //back
         glTranslatef(0,0,-0.9);
         glScalef(2,1,0.2);
-        glutSolidCube(1);
+        glutSolidCube1(1);
       glPopMatrix();
       glPushMatrix();
         //left
         glTranslatef(-0.9,0,0);
         glScalef(0.2,1,2);
-        glutSolidCube(1);
+        glutSolidCube1(1);
       glPopMatrix();
 
       glPushMatrix();
         //right
         glTranslatef(0.9,0,0);
         glScalef(0.2,1,2);
-        glutSolidCube(1);
+        glutSolidCube1(1);
       glPopMatrix();
 
       glPushMatrix();
         //bottom
         glTranslatef(0,-0.4,0);
         glScalef(2,0.2,2);
-        glutSolidCube(1);
+        glutSolidCube1(1);
       glPopMatrix();
 
       glPushMatrix();
         //front
         glTranslatef(0,0,0.9);
         glScalef(2,0.8,0.2);
-        glutSolidCube(1);
+        glutSolidCube1(1);
       glPopMatrix();
 
       glBindTexture(GL_TEXTURE_2D, texture2);
@@ -137,7 +137,7 @@ void furniture::struct_box(){
         //handle
         glTranslatef(0,0,1);
         glScalef(0.4,0.1,0.1);
-        glutSolidCube(1);
+        glutSolidCube1(1);
       glPopMatrix();
   
     glPopMatrix();
@@ -153,34 +153,34 @@ void furniture::struct_cover(){
         //back
         glTranslatef(0,0,-1);
         glScalef(2,3,0.2);
-        glutSolidCube(1);
+        glutSolidCube1(1);
       glPopMatrix();
       glPushMatrix();
         //left
         glTranslatef(-1,0,0);
         glScalef(0.2,3,2);
-        glutSolidCube(1);
+        glutSolidCube1(1);
       glPopMatrix();
 
       glPushMatrix();
         //right
         glTranslatef(1,0,0);
         glScalef(0.2,3,2);
-        glutSolidCube(1);
+        glutSolidCube1(1);
       glPopMatrix();
 
       glPushMatrix();
         //bottom
         glTranslatef(0,-1.5,0);
         glScalef(2,0.2,2);
-        glutSolidCube(1);
+        glutSolidCube1(1);
       glPopMatrix();
 
       glPushMatrix();
         //top
         glTranslatef(0,1.5,0);
         glScalef(2,0.2,2);
-        glutSolidCube(1);
+        glutSolidCube1(1);
       glPopMatrix();
 
       

@@ -40,7 +40,7 @@ void room::drawCube(GLfloat size, GLenum type)
   }
 }
 
-void APIENTRY room::glutSolidCube(GLdouble size)
+void room::glutSolidCube1(GLdouble size)
 {
   drawCube(size, GL_QUADS);
 }
@@ -92,7 +92,7 @@ void room::struct_room(){
 	    	//back wall
     		glTranslatef(0,0,-4);
 	    	glScalef(12,8,0.1);
-	      glutSolidCube(1);
+	      glutSolidCube1(1);
 	    glPopMatrix();
 
       glBindTexture(GL_TEXTURE_2D, texture3);
@@ -101,7 +101,7 @@ void room::struct_room(){
       glPushMatrix();
       	glTranslatef(-5.95,0,0);
 	      glScalef(0.1,8,8);
-	      glutSolidCube(1);
+	      glutSolidCube1(1);
 	    glPopMatrix();
 
 	    //right wall
@@ -109,7 +109,7 @@ void room::struct_room(){
       glPushMatrix();
       	glTranslatef(5.95,0,0);
 	      glScalef(0.1,8,8);
-	      glutSolidCube(1);
+	      glutSolidCube1(1);
 	    glPopMatrix();
 
       glBindTexture(GL_TEXTURE_2D, texture5);
@@ -118,7 +118,7 @@ void room::struct_room(){
       glPushMatrix();
       	glTranslatef(0,3.95,0);
 	      glScalef(12,0.1,8);
-	      glutSolidCube(1);
+	      glutSolidCube1(1);
 	    glPopMatrix();
 
       glPushMatrix();
@@ -149,7 +149,7 @@ void room::struct_room(){
       glPushMatrix();
         glTranslatef(0,-3.95,0);
         glScalef(12,0.1,8);
-        glutSolidCube(1);
+        glutSolidCube1(1);
       glPopMatrix();
 	    
 
@@ -159,7 +159,7 @@ void room::struct_room(){
       glPushMatrix();
       	glTranslatef(-4,0,4);
 	      glScalef(4,8,0.1);
-	      glutSolidCube(1);
+	      glutSolidCube1(1);
 	    glPopMatrix();
 
 	    glBindTexture(GL_TEXTURE_2D, texture1);
@@ -168,7 +168,7 @@ void room::struct_room(){
       glPushMatrix();
       	glTranslatef(4,0,4);
 	      glScalef(4,8,0.1);
-	      glutSolidCube(1);
+	      glutSolidCube1(1);
 	    glPopMatrix();
 
 	    glBindTexture(GL_TEXTURE_2D, texture1);
@@ -177,7 +177,7 @@ void room::struct_room(){
       glPushMatrix();
       	glTranslatef(0,3,4);
 	      glScalef(4,2,0.1);
-	      glutSolidCube(1);
+	      glutSolidCube1(1);
 	    glPopMatrix();
     glPopMatrix();
 
@@ -196,7 +196,7 @@ void room::struct_door(){
           glPushMatrix();
             glPushMatrix();
     		      glScalef(4,6,0.1);
-    		      glutSolidCube(1);
+    		      glutSolidCube1(1);
             glPopMatrix();
           glPopMatrix();
 		    glPopMatrix();

@@ -1,6 +1,8 @@
 #include<cstdio>
 #include<iostream>
-#include <GL/glut.h>
+#include <GLUT/glut.h>
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
 #include "box.h"
 #include "man.h"
 #include "room.h"
@@ -12,8 +14,10 @@
 #include <cstdio>
 using namespace std;
 
-int numFrames = 10;
-int curFrame;
+static int fps=100;
+static int numFrames = 100;
+static int timeFrame=numFrames/fps;
+static int curFrame = 0;
 
 FILE * keyFrameFile;
 
@@ -29,17 +33,21 @@ shelf * sideShelf1;
 shelf * sideShelf2;
 
 bool recordMode = false;
+bool playbackMode = false;
+bool endPlayback=false;
+
+
 
 static int numPoints = 300;
 static int lidAngle = 0;
 static float baseHeight = 0.1;
 
 char MODE = 'N';
-bool SUBMODE = false;
-bool modeChange = false;
-bool bezier_flag=false;
-bool lighting1 = false;
-bool lighting2 = false;
+int SUBMODE = 0;
+int modeChange = 0;
+int bezier_flag= 0;
+int lighting1 = 0;
+int lighting2 = 0;
 
 GLfloat xAngle = 19.8f;  // Rotational angle about the x-axis
 GLfloat yAngle = -61.2f;  // Rotational angle about the y-axis
@@ -62,11 +70,11 @@ static int lidAngleIF = 0;
 static float baseHeightIF = 0.1;
 
 char MODEIF = 'N';
-bool SUBMODEIF = false;
-bool modeChangeIF = false;
-bool bezier_flagIF=false;
-bool lighting1IF = false;
-bool lighting2IF = false;
+int SUBMODEIF = 0;
+int modeChangeIF = 0;
+int bezier_flagIF= 0;
+int lighting1IF = 0;
+int lighting2IF = 0;
 
 GLfloat xAngleIF = 19.8f;  // Rotational angle about the x-axis
 GLfloat yAngleIF = -61.2f;  // Rotational angle about the y-axis
@@ -110,6 +118,7 @@ void setInitialFrame();
 
 
 void saveState(){
+  cout<<"File Made"<<endl;
   myBox->getState(keyFrameFile);
   myMan->getState(keyFrameFile);
   fprintf(keyFrameFile, "%d,%f,%d,%c,%d,%d,%d,%d,%d,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%c,%f,%g,%g,%g\n", 
@@ -118,31 +127,37 @@ void saveState(){
 }
 
 void interPolateFrames(int i){
-  if(i > numFrames){
-    if(setState()) glutTimerFunc(20, interPolateFrames, 1);
+    if(endPlayback==false){
+    if(i > numFrames){
+    if(setState()) glutTimerFunc(timeFrame, interPolateFrames, 1);
     else return;
   }
   else{
     nextFrame();
+      glutPostRedisplay();
+
     //after every 20 ms
-    glutTimerFunc(20, interPolateFrames, i+1);
-  }
+    glutTimerFunc(timeFrame, interPolateFrames, i+1);
+        }
+    }
 }
 
 bool setState(){
   //check if the file has ended!
+    if(!feof(keyFrameFile)){
   if(!myBox->setState(keyFrameFile, numFrames)){
     //file ended
     return false;
   } 
   myMan->setState(keyFrameFile, numFrames);
-  fscanf(keyFrameFile, "%d,%f,%d,%c,%d,%d,%d,%d,%d,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%c,%f,%g,%g,%g\n", 
+    
+  fscanf(keyFrameFile, "%d,%f,%d,%c,%d,%d,%d,%d,%d,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%c,%f,%lf,%lf,%lf\n", 
     &numPointsIF, &baseHeightIF,&lidAngleIF,&MODEIF,&SUBMODEIF,&modeChangeIF,&bezier_flagIF,&lighting1IF,&lighting2IF,&xAngleIF,&yAngleIF,&angleIF,&xIF,&yIF,&zIF,
     &lxIF,&lyIF,&lzIF,&myratioIF,&translateVIF,&translateV_localIF,&uIF,&xCubeIF,&yCubeIF,&zCubeIF,&MODEDIVIF,&interParIF,&unXIF,&unYIF,&unZIF);
 
   //numPoints = numPointsIF;
-  //baseHeight = baseHeightIF;
-  //lidAngle = lidAngleIF;
+  baseHeightIF = (baseHeightIF - baseHeight)/numFrames;
+  lidAngle = lidAngleIF;
   //MODE = MODEIF;
   //SUBMODE = SUBMODEIF;
   //modeChange = modeChangeIF;
@@ -172,23 +187,34 @@ bool setState(){
   unYIF = (unYIF - unY)/numFrames;
   unZIF = (unZIF - unZ)/numFrames;
 
-  return true;
+        }
+    else {
+        fclose(keyFrameFile);
+        endPlayback=true;
+        MODE='N';
+        
+    }
+    return true;
 }
 
 
 
 void playBack(){
+    cout<<"In Playback"<<endl;
   if(!myBox->setState(keyFrameFile, 1)) return;
   myMan->setState(keyFrameFile, 1);
-  fscanf(keyFrameFile, "%d,%f,%d,%c,%d,%d,%d,%d,%d,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%c,%f,%g,%g,%g\n", 
+  fscanf(keyFrameFile, "%d,%f,%d,%c,%d,%d,%d,%d,%d,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%c,%f,%lf,%lf,%lf\n", 
     &numPointsIF, &baseHeightIF,&lidAngleIF,&MODEIF,&SUBMODEIF,&modeChangeIF,&bezier_flagIF,&lighting1IF,&lighting2IF,&xAngleIF,&yAngleIF,&angleIF,&xIF,&yIF,&zIF,
     &lxIF,&lyIF,&lzIF,&myratioIF,&translateVIF,&translateV_localIF,&uIF,&xCubeIF,&yCubeIF,&zCubeIF,&MODEDIVIF,&interParIF,&unXIF,&unYIF,&unZIF);
+    
+    baseHeightIF = (baseHeightIF - baseHeight)/numFrames;
   
   setInitialFrame();
   glutPostRedisplay();
 
   setState();
   interPolateFrames(1);
+  //fclose(keyFrameFile);
 }
 
 void setInitialFrame(){
@@ -232,7 +258,8 @@ void setInitialFrame(){
 
 void nextFrame(){
   if(curFrame == numFrames){
-
+    cout<<"new line read"<<endl;
+    curFrame=0;
     myBox->nextFrame();
     myMan->nextFrame();
     baseHeight += baseHeightIF;
@@ -270,7 +297,7 @@ void nextFrame(){
     return;
   }
   else{
-
+    cout<<"Curr frame "<<curFrame<<endl;
     myBox->nextFrame();
     myMan->nextFrame();
     
@@ -443,6 +470,8 @@ void specialKey(int key, int x, int y)
     saveState();
     return; 
   }
+    
+  
 
   if(MODE == 'N'  || MODE == 'E'){
     switch (key) {
@@ -502,7 +531,15 @@ void processNormalKeys(unsigned char key, int x, int y)
       }
     }
     if(key == '6') {lighting1 = !lighting1; glutPostRedisplay();} 
-    if(key == '7') {lighting2 = !lighting2; glutPostRedisplay();} 
+    if(key == '7') {lighting2 = !lighting2; glutPostRedisplay();}
+    if(key == 'P' || key == 'p') {
+        endPlayback=false;
+      keyFrameFile = fopen ("keyframes.txt","r");
+      if (keyFrameFile==NULL){
+          cout<<"Error opening file"<<endl;
+      }
+      else playBack();
+    }
     if(key == 'R' || key == 'r') {
       //turn on the record mode
       recordMode =  !(recordMode);
@@ -723,6 +760,7 @@ void display()
             glRotatef(30,0,1,0);
             myBox->draw();
             glPushMatrix();
+    cout<<"hghjjh "<<baseHeight<<endl;
               glTranslatef(0,baseHeight,0);
               glTranslatef(0,1.3,0);
               glScalef(0.18,0.16,0.18);

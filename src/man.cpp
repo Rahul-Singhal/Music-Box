@@ -1,4 +1,6 @@
-#include <GL/glut.h>
+#include <GLUT/glut.h>
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
 #include "man.h"
 #include "textureLoader.h"
 
@@ -693,7 +695,7 @@ void man::setState(FILE * fp, int numFrames){
 		&torso11IF, &torso12IF, &torso13IF,
 		&torso21IF, &torso22IF, &torso23IF
 		);
-
+    //cout<<"man Details "<<neck1IF<<" "<<neck2IF<<" "<<neck3IF<<endl;
 	neck1IF = (neck1IF - neck1)/numFrames;
 	neck2IF = (neck2IF - neck2)/numFrames;
 	neck3IF = (neck3IF - neck3)/numFrames;

@@ -40,7 +40,7 @@ void lamp::drawCube(GLfloat size, GLenum type)
   }
 }
 
-void APIENTRY lamp::glutSolidCube(GLdouble size)
+void lamp::glutSolidCube1(GLdouble size)
 {
   drawCube(size, GL_QUADS);
 }

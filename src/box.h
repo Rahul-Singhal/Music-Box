@@ -6,7 +6,9 @@
 #include <string>
 #include <cmath>
 #include <cstdio>
-#include <GL/glut.h>
+#include <GLUT/glut.h>
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
 #include "man.h"
 using namespace std;
 
@@ -45,7 +47,7 @@ private:
 
 
 	static void drawBox(GLfloat size, GLenum type);
-	void APIENTRY glutSolidCube(GLdouble size);
+	void glutSolidCube1(GLdouble size);
 
 public:
 	box();
